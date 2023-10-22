@@ -1,0 +1,30 @@
+version: '3.5'
+services:
+  database-user-service:
+    build: user-postgresql
+    image: user_postgresql:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - digital_wallet_ntwrk
+
+  user-service:
+    build: ./user-service
+    container_name: wallet-user-service
+#    image: user-service:1.0.0
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_USER}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database-user-service
+
+    networks:
+      - digital_wallet_ntwrk
+networks:
+  digital_wallet_ntwrk:
+    name: digital_wallet_ntwrk
