@@ -1,3 +1,5 @@
 rootProject.name = 'digital_wallet'
-include(':user-service')
-include(':user-postgresql')
+include 'user-service'
+include 'user-postgresql'
+include 'discovery-server'
+
