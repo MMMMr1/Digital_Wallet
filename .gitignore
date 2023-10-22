@@ -1,0 +1,5 @@
+# Project exclude paths
+/.gradle/
+/build/
+/user-postgresql/.gradle/
+/user-postgresql/build/
