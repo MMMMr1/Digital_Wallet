@@ -3,6 +3,7 @@ services:
   database-user-service:
     build: user-postgresql
     image: user_postgresql:1.0.0
+    platform: linux/amd64
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -13,7 +14,8 @@ services:
   user-service:
     build: ./user-service
     container_name: wallet-user-service
-#    image: user-service:1.0.0
+    platform: linux/amd64
+    image: user-service:1.0.0
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
