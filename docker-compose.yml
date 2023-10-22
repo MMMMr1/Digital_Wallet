@@ -24,7 +24,15 @@ services:
       - "8080:8080"
     depends_on:
       - database-user-service
+      - discovery-server
 
+    networks:
+      - digital_wallet_ntwrk
+  discovery-server:
+    build: discovery-server
+    image: discovery-server:1.0.0
+    ports:
+      - 8761:8761
     networks:
       - digital_wallet_ntwrk
 networks:
