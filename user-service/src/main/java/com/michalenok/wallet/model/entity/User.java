@@ -1,7 +1,10 @@
 package com.michalenok.wallet.model.entity;
 
+import com.michalenok.wallet.model.constant.UserRole;
+import com.michalenok.wallet.model.constant.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
 
 import java.time.Instant;
 import java.util.UUID;
@@ -17,18 +20,15 @@ public class User {
     @Id
     @Column(name = "uuid", nullable = false)
     private UUID uuid;
-    @Column(name = "mail")
     private String mail;
-    @Column(name = "mobile_phone")
     private String mobilePhone;
-    @Column(name = "password")
     private String password;
-    private String role;
-    private String status;
-    @Column(name = "dtcreate")
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
     private Instant dtCreate;
     @Version
-    @Column(name = "dtupdate")
     private Instant dtUpdate;
     @ToString.Include(name = "password")
     private String maskPassword(){

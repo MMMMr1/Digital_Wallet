@@ -8,13 +8,13 @@ CREATE SCHEMA IF NOT EXISTS app
 
 CREATE TABLE IF NOT EXISTS app.users
 (
-    uuid         uuid PRIMARY KEY,
-    mail   VARCHAR(64)   NOT NULL UNIQUE,
-    mobile_phone   VARCHAR(64)   NOT NULL UNIQUE,
-    password   VARCHAR(2048) NOT NULL,
-    role       VARCHAR(32)   NOT NULL,
-    status       VARCHAR(32)   NOT NULL,
-    dtcreate TIMESTAMP,
-    dtupdate TIMESTAMP
+    uuid uuid PRIMARY KEY,
+    mail VARCHAR(64) NOT NULL UNIQUE,
+    mobile_phone VARCHAR(64) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(32) NOT NULL,
+    status VARCHAR(32) NOT NULL,
+    dt_create TIMESTAMP,
+    dt_update TIMESTAMP
 );
 --rollback DROP TABLE app.users;
