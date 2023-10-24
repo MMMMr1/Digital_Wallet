@@ -20,7 +20,7 @@ public class AuthenticationController {
     protected ResponseEntity<?> create(
             @RequestBody @Validated UserRegistrationDto user) {
         service.register(user);
-        log.info("Registration of user with mail: "+ user.getMail()+ "is successful");
+        log.info("Registration of user with mail: "+ user.mail()+ "is successful");
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @RequestMapping( path = "/verification", method = RequestMethod.GET)

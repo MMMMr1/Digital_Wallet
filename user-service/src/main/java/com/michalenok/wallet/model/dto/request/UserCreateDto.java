@@ -4,18 +4,16 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@Setter
+import java.util.Set;
+
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class UserCreateDto {
-    private String mail;
-    private String mobilePhone;
-    private UserRole role;
-    private UserStatus status;
-    private String password;
+public record UserCreateDto (String mail,
+                             String mobilePhone,
+                             Set<UserRole> role,
+                             UserStatus status,
+                             String password){
 }
+

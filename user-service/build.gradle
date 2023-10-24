@@ -28,6 +28,7 @@ dependencies {
     implementation "org.mapstruct:mapstruct:$mapStructVersion"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation "org.passay:passay:$passayVersion"
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'

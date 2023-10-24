@@ -1,5 +1,6 @@
 package com.michalenok.wallet.service;
 
+import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
 import com.michalenok.wallet.model.dto.request.UserLoginDto;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -29,13 +31,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public void register(UserRegistrationDto user) {
-        UserInfoDto userInfoDto = userService.create(UserCreateDto.builder()
-                .mail(user.getMail())
-                .mobilePhone(user.getMobilePhone())
-                .password(user.getPassword())
+        UserInfoDto userInfoDto = userService.create(
+                UserCreateDto.builder()
+                .mail(user.mail())
+                .mobilePhone(user.mobilePhone())
+                .password(user.password())
+                .status(UserStatus.WAITING_ACTIVATION)
+                .role(Set.of(UserRole.USER))
                 .build());
-        authenticationRepository.save(Verification.builder()
-                .mail(userInfoDto.getMail())
+        authenticationRepository.save(
+                Verification.builder()
+                .mail(userInfoDto.mail())
                 .code(UUID.randomUUID())
                 .build());
 //        sendMessage(user.getMail(),code);
@@ -61,9 +67,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void login(UserLoginDto userLoginDto) {
-        User user = getUser(userLoginDto.getMail());
+        User user = getUser(userLoginDto.mail());
 //        if(!encoder.matches(userLoginDto.getPassword(),user.getPassword())){
-        if(!userLoginDto.getPassword().equals(user.getPassword())){
+        if(!userLoginDto.password().equals(user.getPassword())){
             log.error("Unsuccessful login with "+ user.getMail());
             throw new RuntimeException("Incorrect mail and password");
         }

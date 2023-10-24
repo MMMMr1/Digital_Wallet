@@ -5,26 +5,18 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
 import jakarta.persistence.Version;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class UserInfoDto {
-    private UUID uuid;
-    private String mail;
-    private String mobilePhone;
-    private UserRole role;
-    private UserStatus status;
-    private Instant dtCreate;
-    @Version
-    private Instant dtUpdate;
+public record UserInfoDto(UUID uuid,
+                          String mail,
+                          String mobilePhone,
+                          Set<UserRole> role,
+                          UserStatus status,
+                          Instant dtCreate,
+                          @Version
+                          Instant dtUpdate) {
 }
