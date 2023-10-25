@@ -8,6 +8,8 @@ import com.michalenok.wallet.model.dto.request.UserRegistrationDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
 import com.michalenok.wallet.model.entity.User;
 import com.michalenok.wallet.model.entity.Verification;
+import com.michalenok.wallet.model.exception.ValidationUserException;
+import com.michalenok.wallet.model.exception.VerificationUserException;
 import com.michalenok.wallet.repository.api.AuthenticationRepository;
 import com.michalenok.wallet.service.api.AuthenticationService;
 import com.michalenok.wallet.service.api.UserService;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Set;
 import java.util.UUID;
@@ -22,6 +25,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationRepository authenticationRepository;
     private final UserService userService;
@@ -30,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     //этот метод используется при самостоятельной регистрации клиента в приложении
     @Override
     @Transactional
-    public void register(UserRegistrationDto user) {
+    public void register(@Validated UserRegistrationDto user) {
         UserInfoDto userInfoDto = userService.create(
                 UserCreateDto.builder()
                 .mail(user.mail())
@@ -39,13 +43,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .status(UserStatus.WAITING_ACTIVATION)
                 .role(Set.of(UserRole.USER))
                 .build());
-        authenticationRepository.save(
-                Verification.builder()
-                .mail(userInfoDto.mail())
-                .code(UUID.randomUUID())
-                .build());
+        String code = UUID.randomUUID().toString();
+        Verification verification = new Verification();
+        verification.setMail(userInfoDto.mail());
+        verification.setCode(code);
+        authenticationRepository.save(verification);
 //        sendMessage(user.getMail(),code);
-        log.info("Send verification code to user: " + user);
+        log.info("Send verification code { "+ code + " to user: " + user);
     }
 
     @Override
@@ -53,29 +57,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void verify(String code, String mail) {
         Verification verificationCode = authenticationRepository.findById(mail)
                 .orElseThrow(() ->
-                        new RuntimeException("there is no code for mail " + mail));
-        if(verificationCode.getCode().equals(code)) {
+                        new VerificationUserException("there is no code for mail " + mail));
+        if(code.equals(verificationCode.getCode())) {
             User user = getUser(mail);
             userService.changeStatus(user.getUuid(), user.getDtUpdate(), UserStatus.ACTIVATED);
             authenticationRepository.delete(verificationCode);
             log.error("Successful verification: " + mail + " " + code);
         }else {
             log.error("Unsuccessful verification: " + mail + " " + code);
-            throw new RuntimeException("Incorrect mail and code");
+            throw new VerificationUserException("Incorrect mail and code");
         }
     }
 
     @Override
-    public void login(UserLoginDto userLoginDto) {
+    public void login(@Validated UserLoginDto userLoginDto) {
         User user = getUser(userLoginDto.mail());
 //        if(!encoder.matches(userLoginDto.getPassword(),user.getPassword())){
         if(!userLoginDto.password().equals(user.getPassword())){
             log.error("Unsuccessful login with "+ user.getMail());
-            throw new RuntimeException("Incorrect mail and password");
+            throw new ValidationUserException("Incorrect mail and password");
         }
         if (user.getStatus() != UserStatus.ACTIVATED) {
             log.error("Unsuccessful login with "+ user.getMail()+ " user is not activated");
-            throw new RuntimeException("Incorrect mail and password");
+            throw new ValidationUserException("User with mail {" + user.getMail() + " } is not ACTIVATED");
         }
     }
     @Override

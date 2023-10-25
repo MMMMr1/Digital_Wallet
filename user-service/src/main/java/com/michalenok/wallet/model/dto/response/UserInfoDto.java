@@ -2,9 +2,10 @@ package com.michalenok.wallet.model.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.michalenok.wallet.validator.util.jackson.CustomInstantConverter;
 import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
-import jakarta.persistence.Version;
 
 import java.time.Instant;
 import java.util.Set;
@@ -16,7 +17,8 @@ public record UserInfoDto(UUID uuid,
                           String mobilePhone,
                           Set<UserRole> role,
                           UserStatus status,
+                          @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
                           Instant dtCreate,
-                          @Version
+                          @JsonSerialize(converter = CustomInstantConverter.Serializer.class)
                           Instant dtUpdate) {
 }

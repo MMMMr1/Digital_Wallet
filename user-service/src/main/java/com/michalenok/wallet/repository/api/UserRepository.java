@@ -11,4 +11,8 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends CrudRepository<User, UUID>, PagingAndSortingRepository<User, UUID> {
     Optional<User> findByMail(String mail);
+    Boolean existsByMail(String mail);
+    Boolean existsByMobilePhone(String phoneNumber);
+
+
 }
