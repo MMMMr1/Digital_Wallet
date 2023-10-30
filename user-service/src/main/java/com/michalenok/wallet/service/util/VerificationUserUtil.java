@@ -5,7 +5,7 @@ import java.util.UUID;
 
 @Component
 public class VerificationUserUtil {
-    public String generateCode(){
+    public String generateCode() {
         return UUID.randomUUID().toString();
     }
 }

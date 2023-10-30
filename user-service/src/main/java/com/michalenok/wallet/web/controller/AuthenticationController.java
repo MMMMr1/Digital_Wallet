@@ -25,11 +25,11 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping( path = "/verification")
+    @GetMapping(path = "/verification")
     protected void verify(
             @RequestParam(name = "code") String code,
-            @RequestParam(name = "mail") String mail)  {
-        service.verifyUser(code,mail);
+            @RequestParam(name = "mail") String mail) {
+        service.verifyUser(code, mail);
         log.info("Authentication of user with mail: {} is successful", mail);
     }
 

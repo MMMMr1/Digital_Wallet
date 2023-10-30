@@ -11,6 +11,6 @@ public class MailValidator implements ConstraintValidator<ValidatedMail, String>
 
     @Override
     public boolean isValid(final String mail, final ConstraintValidatorContext context) {
-        return mail.isBlank() || mail.length() <=  50 || mail.matches(REGEXP_VALIDATE_EMAIL);
+        return mail.isBlank() || mail.length() <= 50 || mail.matches(REGEXP_VALIDATE_EMAIL);
     }
 }

@@ -11,6 +11,6 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidatedPhoneN
 
     @Override
     public boolean isValid(final String mail, final ConstraintValidatorContext context) {
-        return mail.isBlank() || mail.length() <=  25 || mail.matches(REGEXP_VALIDATE_PHONE_NUMBER);
+        return mail.isBlank() || mail.length() <= 25 || mail.matches(REGEXP_VALIDATE_PHONE_NUMBER);
     }
 }

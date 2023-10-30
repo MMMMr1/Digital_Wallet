@@ -6,13 +6,15 @@ import java.util.UUID;
 
 @Component
 public class CreationUserUtil {
-    public UUID generateUserUUID(){
+    public UUID generateUserUUID() {
         return UUID.randomUUID();
     }
-    public Instant generateTimeCreatedAt(){
+
+    public Instant generateTimeCreatedAt() {
         return Instant.now();
     }
-    public Instant generateTimeUpdateAt(){
+
+    public Instant generateTimeUpdateAt() {
         return Instant.now();
     }
 }

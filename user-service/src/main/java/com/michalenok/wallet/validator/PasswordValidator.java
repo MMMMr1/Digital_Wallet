@@ -9,7 +9,6 @@ import org.passay.PasswordData;
 import java.util.Arrays;
 
 public class PasswordValidator implements ConstraintValidator<ValidatedPassword, String> {
-
     @Override
     public void initialize(final ValidatedPassword arg0) {
     }

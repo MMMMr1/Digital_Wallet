@@ -9,9 +9,14 @@ import java.util.UUID;
 
 public interface UserService {
     UserInfoDto create(UserCreateDto user);
+
     UserInfoDto update(UUID uuid, UserCreateDto user);
+
     Page<UserInfoDto> getPage(Pageable paging);
+
     UserInfoDto findById(UUID uuid);
+
     UserInfoDto findByMail(String mail);
+
     UserInfoDto changeStatus(UUID uuid, UserStatus status);
 }

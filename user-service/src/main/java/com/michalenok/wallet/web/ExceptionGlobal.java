@@ -51,7 +51,7 @@ public class ExceptionGlobal {
      */
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public List<ExceptionErrorDTO> handler(Throwable e){
+    public List<ExceptionErrorDTO> handler(Throwable e) {
         return List.of(new ExceptionErrorDTO(e.getMessage()));
     }
 }
