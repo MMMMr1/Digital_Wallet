@@ -5,50 +5,53 @@ import com.michalenok.wallet.model.error.ExceptionListDTO;
 import com.michalenok.wallet.model.error.ExceptionStructuredDTO;
 import com.michalenok.wallet.model.exception.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionGlobal {
-    //400
+    /**
+     * 400
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionListDTO> onMethodArgumentNotValidException(
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionListDTO onMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
-        List<ExceptionStructuredDTO> error = e.getBindingResult().getFieldErrors().stream()
+        return new ExceptionListDTO(e.getBindingResult().getFieldErrors().stream()
                 .map(s -> new ExceptionStructuredDTO(s.getField(), s.getDefaultMessage()))
-                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ExceptionListDTO(error));
+                .collect(Collectors.toList()));
     }
-    //    400
+
+    /**
+     * 400
+     */
     @ExceptionHandler(value = {UserNotFoundException.class, VerificationUserException.class})
-    public ResponseEntity<List<ExceptionErrorDTO>>  ArgumentUserNotFoundException(
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionErrorDTO ArgumentUserNotFoundException(
             RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+        return new ExceptionErrorDTO(e.getMessage());
     }
-    //    409
-    @ExceptionHandler(value = {UserAlreadyExistException.class })
-    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentUserAlreadyExistException(
+
+    /**
+     * 409
+     */
+    @ExceptionHandler(UserAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionErrorDTO ArgumentUserAlreadyExistException(
             RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+        return new ExceptionErrorDTO(e.getMessage());
     }
-    @ExceptionHandler(value = {InvalidVersionException.class})
-    public ResponseEntity<List<ExceptionErrorDTO>> ArgumentInvalidVersionException(
-            RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
-    }
-//    500
+
+    /**
+     * 500
+     */
     @ExceptionHandler
-    public ResponseEntity<List<ExceptionErrorDTO>> handler(Throwable e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(List.of(new ExceptionErrorDTO(e.getMessage())));
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public List<ExceptionErrorDTO> handler(Throwable e){
+        return List.of(new ExceptionErrorDTO(e.getMessage()));
     }
 }
