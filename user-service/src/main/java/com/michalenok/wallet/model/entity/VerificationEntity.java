@@ -7,11 +7,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "verification", schema = "app")
 @Getter
 @Setter
-public class Verification {
+@Entity
+@Table(name = "verification", schema = "app")
+public class VerificationEntity {
     @Id
     @Column(name = "mail", nullable = false)
     private String mail;

@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS app.users
     mobile_phone VARCHAR(64) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     status VARCHAR(32) NOT NULL,
-    dt_create TIMESTAMP,
-    dt_update TIMESTAMP
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 --rollback DROP TABLE app.users;
 

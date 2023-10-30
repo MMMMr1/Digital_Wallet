@@ -1,18 +1,45 @@
 package com.michalenok.wallet.mapper;
 
+import com.michalenok.wallet.model.constant.UserRole;
+import com.michalenok.wallet.model.constant.UserStatus;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
+import com.michalenok.wallet.model.dto.request.UserRegistrationDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
-import com.michalenok.wallet.model.entity.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import com.michalenok.wallet.model.entity.UserEntity;
+import org.mapstruct.*;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    UserInfoDto toUserInfo(User user);
-    @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID())")
-    @Mapping(target = "dtCreate", expression = "java(java.time.Instant.now())")
-    @Mapping(target = "dtUpdate", expression = "java(java.time.Instant.now())")
-    User createDtoToUser (UserCreateDto user);
+    UserInfoDto toUserInfo(UserEntity user);
+
+    @InheritInverseConfiguration
+    UserEntity toUserEntity(UserInfoDto user);
+
+    @Mapping(target = "role", expression = "java(rolesToUserRole(userCreateDto.role()))")
+    @Mapping(target = "status", expression = "java(statusToUserStatus(userCreateDto.status()))")
+    void updateUserEntity(@MappingTarget UserEntity userEntity, UserCreateDto userCreateDto);
+
+    @Mapping(target = "status", expression = "java(UserStatus.WAITING_ACTIVATION.name())")
+    @Mapping(target = "role", expression = "java(Set.of(UserRole.USER.name()))")
+    UserCreateDto userRegistrationDtoToUserCreateDto(UserRegistrationDto userRegistrationDto);
+
+    @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "role", expression = "java(rolesToUserRole(user.role()))")
+    @Mapping(target = "status", expression = "java(statusToUserStatus(user.status()))")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    UserEntity createDtoToUser (UserCreateDto user);
+
+    default UserStatus statusToUserStatus(String status) {
+        return UserStatus.valueOf(status);
+    }
+
+    default Set<UserRole> rolesToUserRole(Set<String> role) {
+        return role.stream()
+                .map(UserRole::valueOf)
+                .collect(Collectors.toSet());
+    }
 }

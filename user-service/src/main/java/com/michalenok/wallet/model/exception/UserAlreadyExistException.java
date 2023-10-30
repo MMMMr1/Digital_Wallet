@@ -1,8 +1,9 @@
 package com.michalenok.wallet.model.exception;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class UserAlreadyExistException extends RuntimeException {
-    public UserAlreadyExistException() {
-    }
     public UserAlreadyExistException(String message) {
         super(message);
     }

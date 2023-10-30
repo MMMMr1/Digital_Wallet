@@ -1,6 +1,5 @@
 package com.michalenok.wallet.model.entity;
 
-
 import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
 import jakarta.persistence.Column;
@@ -15,8 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
-
-
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
@@ -25,7 +22,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users", schema = "app")
-public class User {
+public class UserEntity {
     @Id
     @Column(name = "uuid", nullable = false)
     private UUID uuid;
@@ -43,7 +40,7 @@ public class User {
     private Set<UserRole> role;
     @Enumerated(EnumType.STRING)
     private UserStatus status;
-    private Instant dtCreate;
+    private Instant createdAt;
     @Version
-    private Instant dtUpdate;
+    private Instant updatedAt;
 }
