@@ -1,8 +1,7 @@
 version: '3.5'
 services:
   database-user-service:
-    build: user-postgresql
-    image: user_postgresql:1.0.0
+    image: postgres:15.2-alpine
     platform: linux/amd64
     restart: always
     environment:
@@ -25,9 +24,9 @@ services:
     depends_on:
       - database-user-service
       - discovery-server
-
     networks:
       - digital_wallet_ntwrk
+
   discovery-server:
     build: discovery-server
     image: discovery-server:1.0.0
@@ -35,6 +34,18 @@ services:
       - 8761:8761
     networks:
       - digital_wallet_ntwrk
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_USER}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8082:80"
+    networks:
+      - digital_wallet_ntwrk
+
 networks:
   digital_wallet_ntwrk:
     name: digital_wallet_ntwrk
