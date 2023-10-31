@@ -59,9 +59,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserInfoDto changeStatus(UUID uuid, UserStatus status) {
         return userRepository.findById(uuid)
-                .map(s -> {
-                    s.setStatus(status);
-                    return s;
+                .map(user -> {
+                    user.setStatus(status);
+                    return user;
                 })
                 .map(userRepository::save)
                 .map(userMapper::toUserInfo)
