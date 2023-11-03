@@ -28,6 +28,7 @@ services:
       - database-user-service
       - discovery-server
       - configuration-server
+      - api-gateway-server
     networks:
       - digital_wallet_ntwrk
 
@@ -36,6 +37,16 @@ services:
     image: discovery-server:1.0.0
     ports:
       - 8761:8761
+    networks:
+      - digital_wallet_ntwrk
+
+  api-gateway-server:
+    build: api-gateway-server
+    image: api-gateway-server:1.0.0
+    ports:
+      - 8072:8072
+    depends_on:
+      - discovery-server
     networks:
       - digital_wallet_ntwrk
 

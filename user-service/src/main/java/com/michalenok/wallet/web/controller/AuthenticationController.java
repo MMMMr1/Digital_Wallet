@@ -5,6 +5,7 @@ import com.michalenok.wallet.model.dto.request.UserRegistrationDto;
 import com.michalenok.wallet.service.api.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,23 +19,24 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping(path = "/registration")
-    protected ResponseEntity<?> create(
-            @RequestBody @Validated UserRegistrationDto user) {
+    protected ResponseEntity<?> create(@RequestHeader(name = "Is-Proxy-Request", required = true) boolean isProxyRequest,
+                                       @RequestBody @Validated UserRegistrationDto user) {
         service.register(user);
         log.info("Registration of user with mail: {} is successful", user.mail());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping(path = "/verification")
-    protected void verify(
-            @RequestParam(name = "code") String code,
-            @RequestParam(name = "mail") String mail) {
+    protected void verify(@RequestHeader(name = "Is-Proxy-Request", required = true) boolean isProxyRequest,
+                          @RequestParam(name = "code") String code,
+                          @RequestParam(name = "mail") String mail) {
         service.verifyUser(code, mail);
         log.info("Authentication of user with mail: {} is successful", mail);
     }
 
     @PostMapping(path = "/login")
-    public void login(@RequestBody @Validated UserLoginDto user) {
+    public void login(@RequestHeader(name = "Is-Proxy-Request", required = true) boolean isProxyRequest,
+                      @RequestBody @Validated UserLoginDto user) {
         service.login(user);
         log.info("Authorization of {}", user.mail());
     }
