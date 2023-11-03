@@ -10,7 +10,8 @@ spring:
         git:
           uri: https://github.com/MMMMr1/wallet-configs
           default-label: master
-          skip-ssl-validation: true
+          search-paths: "{application}"
+
 
 eureka:
   instance:

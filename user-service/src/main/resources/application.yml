@@ -1,17 +1,8 @@
 spring:
   application:
     name: user-service
-  profiles:
-    active:
-      - dev
 
 ---
-
-spring:
-  config:
-    activate:
-      on-profile: dev
-    import: "optional:configserver:http://configuration-server:8888"
 
 management:
   endpoints:
