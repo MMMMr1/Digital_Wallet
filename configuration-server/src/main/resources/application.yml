@@ -12,7 +12,6 @@ spring:
           default-label: master
           search-paths: "{application}"
 
-
 eureka:
   instance:
     prefer-ip-address: true
