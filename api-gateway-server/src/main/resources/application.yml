@@ -1,55 +1,7 @@
 server:
   port: 8072
+  error:
+    include-message: always
 spring:
   application:
     name: api-gateway-server
-  cloud:
-    gateway:
-      metrics:
-        enabled: true   # default value (see /actuator/metrics/spring.cloud.gateway.requests and /actuator/metrics/spring.cloud.gateway.routes.count)
-      actuator:
-        verbose:
-          enabled: true   # see /actuator/gateway/routes
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      routes:
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/v1/users/{segment},/api/v1/users
-          filters:
-            - AddRequestHeader=Is-Proxy-Request, true
-            - name: CircuitBreaker
-              args:
-                name: userServiceCommonCircuitBreaker
-                fallbackUri: forward:/fallback/userServiceCommonFallback
-
-api-gateway-service:
-  timeout-ms: 6000
-  failure-rate-threshold: 50
-  slow-call-rate-threshold: 50
-  slow-call-duration-threshold: 50
-  permitted-num-of-calls-in-half-open-state: 10
-  sliding-window-size: 10
-  min-number-of-calls: 10
-  wait-duration-in-open-state: 20000
-
-management:
-  endpoint:
-    gateway:
-      enabled: true       # default value
-  endpoints:
-    web:
-      exposure:
-        include: "*"        # OR include: gateway
-
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://discovery-server:8761/eureka

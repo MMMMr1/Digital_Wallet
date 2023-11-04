@@ -12,9 +12,9 @@ import java.time.Duration;
 
 @Configuration
 @RequiredArgsConstructor
-public class GatewayConfiguration {
+public class ApiGatewayConfiguration {
 
-    private final GatewayServiceConfigData gatewayServiceConfigData;
+    private final ApiGatewayServiceConfigData gatewayServiceConfigData;
 
     @Bean
     Customizer<ReactiveResilience4JCircuitBreakerFactory> circuitBreakerFactoryCustomizer() {

@@ -2,6 +2,7 @@ package com.michalenok.wallet.web.controller;
 
 import com.michalenok.wallet.model.dto.FallbackDto;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ public class FallbackController {
     @GetMapping("/userServiceCommonFallback")
     public ResponseEntity<Mono<FallbackDto>> userServiceCommonCircuitBreaker() {
         log.info("User service is down");
-        return ResponseEntity.ok(Mono.just(FallbackDto.builder()
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Mono.just(FallbackDto.builder()
                 .fallbackMessage("Currently user service is down. We are working to resolve the issue")
                 .build()));
     }

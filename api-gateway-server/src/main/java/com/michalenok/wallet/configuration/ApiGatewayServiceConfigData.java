@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Configuration
 @ConfigurationProperties(prefix = "api-gateway-service")
-public class GatewayServiceConfigData {
+public class ApiGatewayServiceConfigData {
     private Long timeoutMs;
     private Float failureRateThreshold;
     private Float slowCallRateThreshold;
