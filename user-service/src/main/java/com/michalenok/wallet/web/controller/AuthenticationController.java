@@ -5,7 +5,6 @@ import com.michalenok.wallet.model.dto.request.UserRegistrationDto;
 import com.michalenok.wallet.service.api.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
