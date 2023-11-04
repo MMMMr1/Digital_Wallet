@@ -25,8 +25,7 @@ public class UserController {
      * this method creates user with all data. Used by Admin
      */
     @PostMapping
-    protected ResponseEntity<?> create(@RequestHeader(name = "Is-Proxy-Request", required = true) boolean isProxyRequest,
-                                       @RequestBody @Validated UserCreateDto user) {
+    protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
         log.info("create {}", user);
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -36,8 +35,7 @@ public class UserController {
      * this method allows to get all users in the system. Used by Admin
      */
     @GetMapping
-    protected Page<UserInfoDto> getAll(@RequestHeader(name = "Is-Proxy-Request", required = true) boolean isProxyRequest,
-                                       Pageable pageable) {
+    protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
     }
 
@@ -55,8 +53,7 @@ public class UserController {
      * this method allows to update user data. Used by all
      */
     @PutMapping(path = "/{uuid}")
-    public void update(@RequestHeader(name = "Is-Proxy-Request", required = true) boolean isProxyRequest,
-                       @PathVariable("uuid") UUID uuid,
+    public void update(@PathVariable("uuid") UUID uuid,
                        @Valid @RequestBody UserCreateDto user) {
         service.update(uuid, user);
         log.info("successfully update user with {}", uuid);
