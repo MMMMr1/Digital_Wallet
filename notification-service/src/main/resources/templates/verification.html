@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Email</title>
+</head>
+<body>
+<div>Welcome to the DigitalWallet!</div>
+<br>
+<div> Please follow the link to complete the registration process:</div>
+<a th:href="@{http://localhost:8072/api/v1/users/verification(code=${code},mail=${mail})}">verification link</a>
+    <br>
+    <div>
+        If you have not registered an account with DigitalWallet, please ignore this message.
+    </div>
+    <br><br><br>
+    <div> Best regards,</div>
+    <div> your DigitalWallet!</div>
+</body>
+</html>

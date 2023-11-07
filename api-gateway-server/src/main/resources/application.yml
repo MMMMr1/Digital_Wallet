@@ -1,0 +1,7 @@
+server:
+  port: 8072
+  error:
+    include-message: always
+spring:
+  application:
+    name: api-gateway-server

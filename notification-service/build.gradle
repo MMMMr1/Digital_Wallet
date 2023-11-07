@@ -1,0 +1,63 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version "$springBootVersion"
+	id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+	id "com.github.davidmc24.gradle.plugin.avro" version "$gradlePluginAvroVersion"
+}
+
+group = 'com.michalenok'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://packages.confluent.io/maven"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.retry:spring-retry'
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation "org.apache.avro:avro:$avroVersion"
+	implementation "io.confluent:kafka-avro-serializer:$kafkaAvroSerializerVersion"
+	implementation "io.confluent:kafka-schema-registry-client:$kafkaSchemaRegistryClientVersion"
+	implementation "org.mapstruct:mapstruct:$mapStructVersion"
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor "org.mapstruct:mapstruct-processor:$mapStructVersion"
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+generateAvroJava {
+	source("/src/main/resources/avro")
+	include("**/*.avsc")
+	outputDir = file("/src/main/java")
+}
+
+generateAvroProtocol {
+	source("/src/main/resources/avro")
+	include("**/*.avdl")
+	outputDir = file("/src/main/java")
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
