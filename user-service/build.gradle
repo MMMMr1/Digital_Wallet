@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
     id "com.github.davidmc24.gradle.plugin.avro" version "$gradlePluginAvroVersion"
+    id 'org.springdoc.openapi-gradle-plugin' version "1.8.0"
 }
 
 group = 'com.michalenok'
@@ -44,7 +45,7 @@ dependencies {
     implementation "org.apache.avro:avro:$avroVersion"
     implementation "io.confluent:kafka-avro-serializer:$kafkaAvroSerializerVersion"
     implementation "io.confluent:kafka-schema-registry-client:$kafkaSchemaRegistryClientVersion"
-
+    implementation "io.swagger.core.v3:swagger-annotations:2.2.15"
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
