@@ -22,8 +22,8 @@ services:
       SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
       SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
       SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 10
-    ports:
-      - "8080:8080"
+#    ports:
+#      - "8080:8080"
     depends_on:
       - database-user-service
       - discovery-server

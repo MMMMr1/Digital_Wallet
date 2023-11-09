@@ -2,8 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
-    id "com.github.davidmc24.gradle.plugin.avro" version "$gradlePluginAvroVersion"
-    id 'org.springdoc.openapi-gradle-plugin' version "1.8.0"
+    id 'com.github.davidmc24.gradle.plugin.avro' version "$gradlePluginAvroVersion"
+    id 'org.springdoc.openapi-gradle-plugin' version "$gradlePluginOpenapiVersion"
 }
 
 group = 'com.michalenok'
@@ -45,7 +45,10 @@ dependencies {
     implementation "org.apache.avro:avro:$avroVersion"
     implementation "io.confluent:kafka-avro-serializer:$kafkaAvroSerializerVersion"
     implementation "io.confluent:kafka-schema-registry-client:$kafkaSchemaRegistryClientVersion"
-    implementation "io.swagger.core.v3:swagger-annotations:2.2.15"
+    implementation "io.swagger.core.v3:swagger-annotations:$swaggerAnnotationsVersion"
+    implementation 'org.liquibase:liquibase-core'
+    implementation "org.mapstruct:mapstruct:$mapStructVersion"
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
@@ -71,6 +74,9 @@ generateAvroProtocol {
     outputDir = file("/src/main/java")
 }
 
+tasks.named('test') {
+    useJUnitPlatform()
+}
 tasks.named('test') {
     useJUnitPlatform()
 }
