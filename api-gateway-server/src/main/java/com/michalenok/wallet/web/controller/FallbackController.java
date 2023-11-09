@@ -7,18 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 @Log4j2
 @RequestMapping("/fallback")
 @RestController
 public class FallbackController {
 
-    @GetMapping("/userServiceCommonFallback")
-    public ResponseEntity<Mono<FallbackDto>> userServiceCommonCircuitBreaker() {
+    @GetMapping("/user-service-common-fallback")
+    public ResponseEntity<FallbackDto> userServiceCommonCircuitBreaker() {
         log.info("User service is down");
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Mono.just(FallbackDto.builder()
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(FallbackDto.builder()
                 .fallbackMessage("Currently user service is down. We are working to resolve the issue")
-                .build()));
+                .build());
     }
 }

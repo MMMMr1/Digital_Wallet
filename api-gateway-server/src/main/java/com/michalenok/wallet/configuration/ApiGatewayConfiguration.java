@@ -38,13 +38,13 @@ public class ApiGatewayConfiguration {
                                 .build())
                         .build());
     }
+
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder
                 .routes()
-                .route("user_service_swagger_route", r -> r.path( "/user-service/v3/api-docs")
-                        .uri("lb://user-service")
-                )
+                .route("user_service_swagger_route", r -> r.path("/api/v1/users/**", "/user-service/v3/api-docs")
+                        .uri("lb://user-service"))
                 .build();
     }
 }

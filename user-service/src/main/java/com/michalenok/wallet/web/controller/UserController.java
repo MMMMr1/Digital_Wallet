@@ -21,9 +21,6 @@ import java.util.UUID;
 public class UserController {
     private final UserService service;
 
-    /**
-     * this method creates user with all data. Used by Admin
-     */
     @PostMapping
     protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
         log.info("create {}", user);
@@ -31,17 +28,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /**
-     * this method allows to get all users in the system. Used by Admin
-     */
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
     }
 
-    /**
-     * this method allows to get user by id. Used by all
-     */
     @GetMapping(path = "/{uuid}")
     public UserInfoDto get(@RequestHeader(name = "Is-Proxy-Request", required = true) boolean isProxyRequest,
                            @PathVariable("uuid") UUID uuid) {
@@ -49,9 +40,6 @@ public class UserController {
         return service.findById(uuid);
     }
 
-    /**
-     * this method allows to update user data. Used by all
-     */
     @PutMapping(path = "/{uuid}")
     public void update(@PathVariable("uuid") UUID uuid,
                        @Valid @RequestBody UserCreateDto user) {
