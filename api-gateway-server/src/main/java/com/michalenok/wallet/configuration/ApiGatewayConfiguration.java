@@ -43,10 +43,13 @@ public class ApiGatewayConfiguration {
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder
                 .routes()
-                .route("user_service_swagger_route", r -> r.path("/api/v1/users/{segment}", "/api/v1/users", "/api/v1/users/**", "/user-service/v3/api-docs")
+                .route("user_service", r -> r.path(
+                                "/api/v1/users/{segment}",
+                                "/api/v1/users",
+                                "/user-service/v3/api-docs")
                         .filters(f -> f.addRequestHeader("Is-Proxy-Request", "true")
                                 .circuitBreaker(c -> c.setName("userServiceCommonCircuitBreaker")
-                                        .setFallbackUri("forward:/fallback/user-service-common-fallback")))
+                                .setFallbackUri("forward:/fallback/user-service-common-fallback")))
                         .uri("lb://user-service"))
                 .build();
     }
