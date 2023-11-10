@@ -25,7 +25,7 @@ services:
     depends_on:
       - database-user-service
       - configuration-server
-      - discovery-server
+      - discovery-server 
       - api-gateway-server
     networks:
       - digital_wallet_ntwrk

@@ -29,7 +29,7 @@ public class UserEntity {
     private String mail;
     private String mobilePhone;
     private String password;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @ElementCollection
     @CollectionTable(
             schema = "app",
@@ -38,7 +38,7 @@ public class UserEntity {
     )
     @Column(name = "role")
     private Set<UserRole> role;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private UserStatus status;
     private Instant createdAt;
     @Version

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS app.users
     mail VARCHAR(64) NOT NULL UNIQUE,
     mobile_phone VARCHAR(64) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    status VARCHAR(32) NOT NULL,
+    status SMALLINT NOT NULL,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -22,9 +22,7 @@ CREATE TABLE IF NOT EXISTS app.users
 CREATE TABLE IF NOT EXISTS app.user_role
 (
     user_uuid uuid NOT NULL,
-    role  VARCHAR(32) ,
-    CONSTRAINT user_role_pkey PRIMARY KEY (user_uuid, role),
-    CONSTRAINT user_role_enum CHECK (role IN ('ADMIN', 'USER'))
+    role  SMALLINT,
+    CONSTRAINT user_role_pkey PRIMARY KEY (user_uuid, role)
 );
 --rollback DROP TABLE app.user_role;
-
