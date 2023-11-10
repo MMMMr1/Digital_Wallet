@@ -4,8 +4,11 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class VerificationUserUtil {
-    public String generateCode() {
+public class UuidUtil {
+    public String generateUuidCode() {
         return UUID.randomUUID().toString();
+    }
+    public UUID generateUuid() {
+        return UUID.randomUUID();
     }
 }
