@@ -26,8 +26,8 @@ services:
       - "8080:8080"
     depends_on:
       - database-user-service
-      - discovery-server
       - configuration-server
+      - discovery-server
     networks:
       - digital_wallet_ntwrk
 
