@@ -3,6 +3,7 @@ package com.michalenok.wallet.web.controller;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
 import com.michalenok.wallet.service.api.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,9 +22,7 @@ import java.util.UUID;
 public class UserController {
     private final UserService service;
 
-    /**
-     * this method creates user with all data. Used by Admin
-     */
+    @Operation(summary = "US1: Register client in application", tags = "users")
     @PostMapping
     protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
         log.info("create {}", user);
@@ -31,26 +30,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /**
-     * this method allows to get all users in the system. Used by Admin
-     */
+    @Operation(summary = "US2: Loading of all clients", tags = "users")
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
     }
 
-    /**
-     * this method allows to get user by id. Used by all
-     */
+    @Operation(summary = "US3: Loading of client by uuid", tags = "users")
     @GetMapping(path = "/{uuid}")
     public UserInfoDto get(@PathVariable("uuid") UUID uuid) {
         log.info("get user with {}", uuid);
         return service.findById(uuid);
     }
 
-    /**
-     * this method allows to update user data. Used by all
-     */
+    @Operation(summary = "US4: Update client by uuid", tags = "users")
     @PutMapping(path = "/{uuid}")
     public void update(@PathVariable("uuid") UUID uuid,
                        @Valid @RequestBody UserCreateDto user) {
