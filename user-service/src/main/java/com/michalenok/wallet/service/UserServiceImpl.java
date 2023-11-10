@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.util.UUID;
 
@@ -91,6 +90,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException(String.format("User with mobile phone {%s} already exist", userDto.mobilePhone()));
         }
     }
+
 
     private UserEntity getUserById(UUID uuid) {
         return userRepository.findById(uuid)

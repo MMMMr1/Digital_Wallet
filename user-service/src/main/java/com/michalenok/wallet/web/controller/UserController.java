@@ -21,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService service;
-
+  
     @Operation(summary = "US1: Register client in application", tags = "users")
     @PostMapping
     protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
@@ -30,19 +30,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "US2: Loading of all clients", tags = "users")
+    @Operation(summary = "US2: Loading of all clients", tags = "users") 
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
     }
-
-    @Operation(summary = "US3: Loading of client by uuid", tags = "users")
+ 
+    @Operation(summary = "US3: Loading of client by uuid", tags = "users") 
     @GetMapping(path = "/{uuid}")
     public UserInfoDto get(@PathVariable("uuid") UUID uuid) {
         log.info("get user with {}", uuid);
         return service.findById(uuid);
-    }
-
+    } 
+  
     @Operation(summary = "US4: Update client by uuid", tags = "users")
     @PutMapping(path = "/{uuid}")
     public void update(@PathVariable("uuid") UUID uuid,

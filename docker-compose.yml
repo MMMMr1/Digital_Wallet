@@ -16,13 +16,17 @@ services:
     platform: linux/amd64
     image: user-service:1.0.0
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_USER}
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_APPLICATION_NAME: user-service
+      SPRING_CLOUD_CONFIG_PROFILE: dev
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
+      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 20
     ports:
       - "8080:8080"
     depends_on:
       - database-user-service
+      - configuration-server
       - discovery-server
     networks:
       - digital_wallet_ntwrk
@@ -35,6 +39,18 @@ services:
     networks:
       - digital_wallet_ntwrk
 
+  configuration-server:
+    build: configuration-server
+    image: configuration-server:1.0.0
+    ports:
+      - 8888:8888
+    depends_on:
+      - discovery-server
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - digital_wallet_ntwrk
+      
   pgadmin:
     image: dpage/pgadmin4
     restart: always

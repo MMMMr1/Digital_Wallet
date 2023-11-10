@@ -26,6 +26,7 @@ public class AuthenticationController {
         log.info("Registration of user with mail: {} is successful", user.mail());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+  
     @Operation(summary = "AS2: Verify client", tags = "authorization")
     @GetMapping(path = "/verification")
     protected void verify(
@@ -34,6 +35,7 @@ public class AuthenticationController {
         service.verifyUser(code, mail);
         log.info("Authentication of user with mail: {} is successful", mail);
     }
+  
     @Operation(summary = "AS3: Authenticate client", tags = "authorization")
     @PostMapping(path = "/login")
     public void login(@RequestBody @Validated UserLoginDto user) {
