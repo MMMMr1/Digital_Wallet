@@ -26,4 +26,3 @@ CREATE TABLE IF NOT EXISTS app.user_role
     CONSTRAINT user_role_pkey PRIMARY KEY (user_uuid, role)
 );
 --rollback DROP TABLE app.user_role;
-

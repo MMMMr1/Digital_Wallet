@@ -22,12 +22,11 @@ services:
       SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
       SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
       SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 20
-    ports:
-      - "8080:8080"
     depends_on:
       - database-user-service
       - configuration-server
-      - discovery-server
+      - discovery-server 
+      - api-gateway-server
     networks:
       - digital_wallet_ntwrk
 
@@ -36,6 +35,24 @@ services:
     image: discovery-server:1.0.0
     ports:
       - 8761:8761
+    networks:
+      - digital_wallet_ntwrk
+
+  api-gateway-server:
+    build: api-gateway-server
+    image: api-gateway-server:1.0.0
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_APPLICATION_NAME: api-gateway-server
+      SPRING_CLOUD_CONFIG_PROFILE: dev
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
+      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 20
+    ports:
+      - 8072:8072
+    depends_on:
+      - configuration-server
+      - discovery-server
     networks:
       - digital_wallet_ntwrk
 
@@ -50,7 +67,7 @@ services:
       SPRING_PROFILES_ACTIVE: dev
     networks:
       - digital_wallet_ntwrk
-      
+
   pgadmin:
     image: dpage/pgadmin4
     restart: always

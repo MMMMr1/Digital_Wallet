@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService service;
 
+
     @Operation(summary = "AS1: Register client", tags = "authorization")
     @PostMapping(path = "/registration")
     protected ResponseEntity<?> create(
@@ -26,7 +27,7 @@ public class AuthenticationController {
         log.info("Registration of user with mail: {} is successful", user.mail());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-  
+
     @Operation(summary = "AS2: Verify client", tags = "authorization")
     @GetMapping(path = "/verification")
     protected void verify(

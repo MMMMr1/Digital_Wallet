@@ -91,7 +91,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
     private UserEntity getUserById(UUID uuid) {
         return userRepository.findById(uuid)
                 .orElseThrow(() ->

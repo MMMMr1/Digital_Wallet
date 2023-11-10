@@ -1,4 +1,5 @@
 rootProject.name = 'digital_wallet'
 include 'user-service'
 include 'discovery-server'
-include 'configuration-server'
+include 'configuration-server' 
+include 'api-gateway-server' 
