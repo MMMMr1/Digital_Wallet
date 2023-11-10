@@ -1,0 +1,51 @@
+version: '3.5'
+services:
+  database-user-service:
+    image: postgres:15.2-alpine
+    platform: linux/amd64
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - digital_wallet_ntwrk
+
+  user-service:
+    build: ./user-service
+    container_name: wallet-user-service
+    platform: linux/amd64
+    image: user-service:1.0.0
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_USER}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database-user-service
+      - discovery-server
+    networks:
+      - digital_wallet_ntwrk
+
+  discovery-server:
+    build: discovery-server
+    image: discovery-server:1.0.0
+    ports:
+      - 8761:8761
+    networks:
+      - digital_wallet_ntwrk
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_USER}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8082:80"
+    networks:
+      - digital_wallet_ntwrk
+
+networks:
+  digital_wallet_ntwrk:
+    name: digital_wallet_ntwrk
