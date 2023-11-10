@@ -13,7 +13,7 @@ public class ApiGatewayHeaderValidatorFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        if (!Objects.equals(req.getHeader("Is-Proxy-Request"), REQUESTS_FROM_API_GATEWAY)) {
+        if (Objects.equals(req.getHeader("Is-Proxy-Request"), REQUESTS_FROM_API_GATEWAY)) {
             chain.doFilter(request, response);
         } else {
             ((HttpServletResponse) response).setStatus(407);

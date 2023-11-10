@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+    id 'org.springdoc.openapi-gradle-plugin' version "$gradlePluginOpenapiVersion"
 }
 
 group = 'com.michalenok'
@@ -29,7 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.retry:spring-retry'
-
+    implementation "io.swagger.core.v3:swagger-annotations:$swaggerAnnotationsVersion"
     implementation 'org.liquibase:liquibase-core'
     implementation "org.mapstruct:mapstruct:$mapStructVersion"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
@@ -37,8 +38,6 @@ dependencies {
     implementation "org.passay:passay:$passayVersion"
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonDatatypeVersion"
-
-
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
