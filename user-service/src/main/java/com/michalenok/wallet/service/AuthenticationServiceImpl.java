@@ -11,7 +11,7 @@ import com.michalenok.wallet.model.exception.VerificationUserException;
 import com.michalenok.wallet.repository.api.VerificationRepository;
 import com.michalenok.wallet.service.api.AuthenticationService;
 import com.michalenok.wallet.service.api.UserService;
-import com.michalenok.wallet.service.util.VerificationUserUtil;
+import com.michalenok.wallet.service.util.UuidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final VerificationRepository verificationRepository;
     private final UserService userService;
     private final UserMapper userMapper;
-    private final VerificationUserUtil verificationUserUtil;
+    private final UuidUtil uuidUtil;
 
     @Override
     @Transactional
@@ -82,7 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private VerificationEntity generateVerificationEntity(String mail){
         VerificationEntity verificationEntity = new VerificationEntity();
         verificationEntity.setMail(mail);
-        verificationEntity.setCode(verificationUserUtil.generateCode());
+        verificationEntity.setCode(uuidUtil.generateUuidCode());
         log.info("Create verification code {}  to user: {}", verificationEntity.getCode(), verificationEntity.getMail());
         return verificationEntity;
     }

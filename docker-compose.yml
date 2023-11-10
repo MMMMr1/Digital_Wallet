@@ -21,7 +21,7 @@ services:
       SPRING_CLOUD_CONFIG_PROFILE: dev
       SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
       SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
-      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 10
+      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 20
     ports:
       - "8080:8080"
     depends_on:
@@ -50,7 +50,7 @@ services:
       SPRING_PROFILES_ACTIVE: dev
     networks:
       - digital_wallet_ntwrk
-
+      
   pgadmin:
     image: dpage/pgadmin4
     restart: always
