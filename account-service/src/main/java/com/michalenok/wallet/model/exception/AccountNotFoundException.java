@@ -3,8 +3,8 @@ package com.michalenok.wallet.model.exception;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class InvalidVersionException extends RuntimeException {
-    public InvalidVersionException(String message) {
+public class AccountNotFoundException extends RuntimeException {
+    public AccountNotFoundException(String message) {
         super(message);
     }
 }
