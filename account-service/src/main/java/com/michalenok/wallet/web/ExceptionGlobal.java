@@ -31,7 +31,7 @@ public class ExceptionGlobal {
      */
     @ExceptionHandler(value = AccountNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionErrorDTO ArgumentUserNotFoundException(
+    public ExceptionErrorDTO ArgumentAccountNotFoundException(
             RuntimeException e) {
         return new ExceptionErrorDTO(e.getMessage());
     }
