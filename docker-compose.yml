@@ -30,6 +30,26 @@ services:
     networks:
       - digital_wallet_ntwrk
 
+  account-service:
+    build: ./account-service
+    container_name: wallet-account-service
+    platform: linux/amd64
+    image: account-service:1.0.0
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_APPLICATION_NAME: account-service
+      SPRING_CLOUD_CONFIG_PROFILE: dev
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
+      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 50
+    depends_on:
+      - database-user-service
+      - configuration-server
+      - discovery-server
+      - api-gateway-server
+    networks:
+      - digital_wallet_ntwrk
+
   discovery-server:
     build: discovery-server
     image: discovery-server:1.0.0
