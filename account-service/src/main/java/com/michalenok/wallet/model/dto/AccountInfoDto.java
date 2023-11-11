@@ -1,11 +1,12 @@
 package com.michalenok.wallet.model.dto;
 
-import lombok.Builder;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record AccountInfoDto(UUID accountNumber,
                              String currencyCode,
                              BigDecimal currentBalance,
