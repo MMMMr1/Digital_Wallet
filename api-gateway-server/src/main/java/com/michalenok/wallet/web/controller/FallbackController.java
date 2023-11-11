@@ -20,4 +20,12 @@ public class FallbackController {
                 .fallbackMessage("Currently user service is down. We are working to resolve the issue")
                 .build());
     }
+
+    @GetMapping("/account-service-common-fallback")
+    public ResponseEntity<FallbackDto> accountServiceCommonCircuitBreaker() {
+        log.info("User service is down");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(FallbackDto.builder()
+                .fallbackMessage("Currently account service is down. We are working to resolve the issue")
+                .build());
+    }
 }
