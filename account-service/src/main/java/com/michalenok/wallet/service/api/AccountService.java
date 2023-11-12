@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AccountService {
-    AccountInfoDto create(UUID user_uuid);
+    AccountInfoDto create(UUID userUuid);
+
+    AccountInfoDto close(UUID accountUuid);
 
     Page<AccountInfoDto> getPage(Pageable paging);
 

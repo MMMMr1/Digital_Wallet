@@ -94,6 +94,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private void createDefaultAccount(UUID userUuid) {
         log.info("Create default account for user: {}", userUuid);
-        accountServiceFeignClient.createDefaultAccount(userUuid);
+        accountServiceFeignClient.createAccount(userUuid);
     }
 }

@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS app.accounts
     client_id uuid NOT NULL,
     currency_code CHAR(3) NOT NULL,
     current_balance NUMERIC(19, 4) NOT NULL,
-    open_date DATE NOT NULL,
-    close_date DATE,
+    open_date TIMESTAMP NOT NULL,
+    close_date TIMESTAMP,
     max_limit NUMERIC(19, 4) NOT NULL,
     is_active BOOLEAN NOT NULL
         CONSTRAINT positive_balance_check CHECK ( current_balance >= 0 ),

@@ -35,6 +35,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
+    public AccountInfoDto close(UUID accountUuid) {
+        return accountRepository.findById(accountUuid)
+                .map(account -> {
+                    account.setIsActive(Boolean.FALSE);
+                    account.setCloseDate(timeGenerationUtil.generateCurrentInstant());
+                    accountRepository.save(account);
+                    return account;
+                })
+                .map(accountMapper::toAccountInfo)
+                .orElseThrow(() ->
+                        new AccountNotFoundException(String.format("Account with uuid {%s} not exist", accountUuid)));
+    }
+
+    @Override
     public Page<AccountInfoDto> getPage(Pageable paging) {
         return accountRepository.findAll(paging)
                 .map(accountMapper::toAccountInfo);
@@ -57,9 +72,9 @@ public class AccountServiceImpl implements AccountService {
         AccountEntity account = new AccountEntity();
         account.setAccountNumber(uuidUtil.generateUuid());
         account.setClientId(user_uuid);
-        account.setCurrencyCode("EU");
+        account.setCurrencyCode("EUR");
         account.setCurrentBalance(BigDecimal.ZERO);
-        account.setOpenDate(timeGenerationUtil.generateCurrentLocalDate());
+        account.setOpenDate(timeGenerationUtil.generateCurrentInstant());
         account.setIsActive(true);
         account.setMaxLimit(BigDecimal.valueOf(100000));
         log.info("initialize account {} for user with uuid {}, open date {}",

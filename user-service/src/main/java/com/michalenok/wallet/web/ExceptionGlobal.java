@@ -31,7 +31,7 @@ public class ExceptionGlobal {
      */
     @ExceptionHandler(value = {UserNotFoundException.class, VerificationUserException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionErrorDTO ArgumentUserNotFoundException(
+    public ExceptionErrorDTO argumentUserNotFoundException(
             RuntimeException e) {
         return new ExceptionErrorDTO(e.getMessage());
     }
@@ -41,7 +41,16 @@ public class ExceptionGlobal {
      */
     @ExceptionHandler(UserAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ExceptionErrorDTO ArgumentUserAlreadyExistException(
+    public ExceptionErrorDTO argumentUserAlreadyExistException(
+            RuntimeException e) {
+        return new ExceptionErrorDTO(e.getMessage());
+    }
+    /**
+     * 503
+     */
+    @ExceptionHandler(AccountServiceNotFoundException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ExceptionErrorDTO accountServiceNotFoundException(
             RuntimeException e) {
         return new ExceptionErrorDTO(e.getMessage());
     }

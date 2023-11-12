@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface AccountRepository extends CrudRepository<AccountEntity, UUID>, PagingAndSortingRepository<AccountEntity, UUID> {
     List<AccountEntity> findByClientId(UUID clientId);
+    boolean existsById(UUID accountNumber);
 }

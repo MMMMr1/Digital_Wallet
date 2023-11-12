@@ -2,6 +2,7 @@ package com.michalenok.wallet.service;
 
 import com.michalenok.wallet.feign.AccountServiceFeignClient;
 import com.michalenok.wallet.mapper.UserMapper;
+import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
@@ -116,8 +117,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private void createDefaultAccount(UserEntity user){
-        if (Objects.equals(user.getStatus(),UserStatus.ACTIVATED.name())){
-            accountServiceFeignClient.createDefaultAccount(user.getUuid());
+        if (Objects.equals(user.getStatus(),UserStatus.ACTIVATED) &&
+                user.getRole().contains(UserRole.USER)){
+            accountServiceFeignClient.createAccount(user.getUuid());
         }
         log.info("Create default account for user: {}", user.getMail());
     }

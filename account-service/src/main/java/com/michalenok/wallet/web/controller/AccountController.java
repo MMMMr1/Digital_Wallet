@@ -45,4 +45,10 @@ public class AccountController {
         log.info("get all accounts for client [{}]", uuid);
         return accountService.findAllByClientId(uuid);
     }
+    @Operation(summary = "AS5: Closing of account by uuid", tags = "accounts")
+    @PutMapping(path = "/closing")
+    public void closeAccount(@RequestParam("account_uuid") UUID uuid) {
+        log.info("close account {}", uuid);
+         accountService.close(uuid);
+    }
 }

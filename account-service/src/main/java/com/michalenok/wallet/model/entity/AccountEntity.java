@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -22,8 +22,8 @@ public class AccountEntity {
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal currentBalance;
     @Column(nullable = false)
-    private LocalDate openDate;
-    private LocalDate closeDate;
+    private Instant openDate;
+    private Instant closeDate;
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal maxLimit;
     @Column(nullable = false)

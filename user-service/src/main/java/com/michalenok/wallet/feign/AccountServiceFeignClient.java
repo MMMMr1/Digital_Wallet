@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.UUID;
 
-@FeignClient("${feign.client.account-service.name}")
+@FeignClient(name = "${feign.client.account-service.name}", fallbackFactory = AccountServiceFallback.class)
 public interface AccountServiceFeignClient {
 
     @PostMapping("/api/v1/accounts")
-    ResponseEntity<?> createDefaultAccount(@RequestParam(name = "client_uuid") UUID uuid);
+    ResponseEntity<?> createAccount(@RequestParam(name = "client_uuid") UUID uuid);
 }
