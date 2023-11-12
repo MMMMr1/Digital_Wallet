@@ -10,10 +10,13 @@ import java.util.Objects;
 @Component
 public class ApiGatewayHeaderValidatorFilter implements Filter {
     public static final String REQUESTS_FROM_API_GATEWAY = "true";
+    public static final String REQUESTS_FROM_FEIGN = "true";
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        if (Objects.equals(req.getHeader("Is-Proxy-Request"), REQUESTS_FROM_API_GATEWAY)) {
+        if (Objects.equals(req.getHeader("Is-Proxy-Request"), REQUESTS_FROM_API_GATEWAY) ||
+                Objects.equals(req.getHeader("Is-Feign-Request"), REQUESTS_FROM_FEIGN)) {
             chain.doFilter(request, response);
         } else {
             ((HttpServletResponse) response).setStatus(407);

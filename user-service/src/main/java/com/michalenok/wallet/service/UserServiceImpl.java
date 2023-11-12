@@ -1,5 +1,6 @@
 package com.michalenok.wallet.service;
 
+import com.michalenok.wallet.feign.AccountServiceFeignClient;
 import com.michalenok.wallet.mapper.UserMapper;
 import com.michalenok.wallet.model.constant.UserStatus;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 @Log4j2
@@ -25,6 +27,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final AccountServiceFeignClient accountServiceFeignClient;
     private final UserMapper userMapper;
     private final TimeGenerationUtil timeGenerationUtil;
     private final UuidUtil uuidUtil;
@@ -32,20 +35,24 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserInfoDto create(UserCreateDto userDto) {
+        log.info("Create user: {}", userDto);
         isUserExists(userDto);
         UserEntity user = userMapper.createDtoToUser(userDto);
         initializeNewUser(user);
+        createDefaultAccount(user);
         return userMapper.toUserInfo(userRepository.save(user));
     }
 
     @Override
     public UserInfoDto findById(UUID uuid) {
+        log.info("Find user by uuid: {}", uuid);
         return userMapper.toUserInfo(getUserById(uuid));
     }
 
     @Override
     @Transactional
     public UserInfoDto update(UUID uuid, UserCreateDto userDto) {
+        log.info("Update user by uuid: {}. New data: {}", uuid, userDto);
         UserEntity user = getUserById(uuid);
         userMapper.updateUserEntity(user, userDto);
         userRepository.save(user);
@@ -54,6 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserInfoDto> getPage(Pageable paging) {
+        log.info("Get page with user info.");
         return userRepository.findAll(paging)
                 .map(userMapper::toUserInfo);
     }
@@ -64,6 +72,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(uuid)
                 .map(user -> {
                     user.setStatus(status);
+                    log.info("Change user status {}, {}", uuid, status);
                     return user;
                 })
                 .map(userRepository::save)
@@ -104,5 +113,12 @@ public class UserServiceImpl implements UserService {
         user.setUpdatedAt(instant);
         log.info("initialize user with mail {}: uuid {}, createdAt {}, updatedAt {}",
                 user.getMail(), user.getUuid(), user.getCreatedAt(), user.getUpdatedAt());
+    }
+
+    private void createDefaultAccount(UserEntity user){
+        if (Objects.equals(user.getStatus(),UserStatus.ACTIVATED.name())){
+            accountServiceFeignClient.createDefaultAccount(user.getUuid());
+        }
+        log.info("Create default account for user: {}", user.getMail());
     }
 }
