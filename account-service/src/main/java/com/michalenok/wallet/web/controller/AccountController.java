@@ -1,6 +1,6 @@
 package com.michalenok.wallet.web.controller;
 
-import com.michalenok.wallet.model.dto.AccountInfoDto;
+import com.michalenok.wallet.model.dto.response.AccountInfoDto;
 import com.michalenok.wallet.service.api.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 

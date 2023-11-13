@@ -26,6 +26,8 @@ public class AccountEntity {
     private Instant closeDate;
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal maxLimit;
+    @Column(nullable = false, precision = 19, scale = 4)
+    private BigDecimal blockedSum;
     @Column(nullable = false)
     private Boolean isActive;
 }

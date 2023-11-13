@@ -1,6 +1,6 @@
 package com.michalenok.wallet.mapper;
 
-import com.michalenok.wallet.model.dto.AccountInfoDto;
+import com.michalenok.wallet.model.dto.response.AccountInfoDto;
 import com.michalenok.wallet.model.entity.AccountEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;

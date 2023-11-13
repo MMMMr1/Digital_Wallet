@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS app.accounts
     client_id uuid NOT NULL,
     currency_code CHAR(3) NOT NULL,
     current_balance NUMERIC(19, 4) NOT NULL,
+    blocked_sum NUMERIC(19, 4) NOT NULL,
     open_date TIMESTAMP NOT NULL,
     close_date TIMESTAMP,
     max_limit NUMERIC(19, 4) NOT NULL,
