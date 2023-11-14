@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,13 +90,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private AccountEntity initializeNewAccount(UUID userUuid) {
+        Instant time = timeGenerationUtil.generateCurrentInstant();
         AccountEntity account = new AccountEntity();
         account.setAccountNumber(uuidUtil.generateUuid());
         account.setClientId(userUuid);
         account.setCurrencyCode("EUR");
         account.setCurrentBalance(BigDecimal.ZERO);
         account.setBlockedSum(BigDecimal.ZERO);
-        account.setOpenDate(timeGenerationUtil.generateCurrentInstant());
+        account.setOpenDate(time);
+        account.setUpdatedAt(time);
         account.setIsActive(true);
         account.setMaxLimit(BigDecimal.valueOf(100000));
         log.info("initialize account {} for user with uuid {}, open date {}",

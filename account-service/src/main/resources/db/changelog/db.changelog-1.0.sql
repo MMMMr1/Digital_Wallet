@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS app.accounts
     open_date TIMESTAMP NOT NULL,
     close_date TIMESTAMP,
     max_limit NUMERIC(19, 4) NOT NULL,
-    is_active BOOLEAN NOT NULL
+    is_active BOOLEAN NOT NULL,
+    updated_at TIMESTAMP,
         CONSTRAINT positive_balance_check CHECK ( current_balance >= 0 ),
         CONSTRAINT max_limit_balance_check CHECK ( current_balance <= accounts.max_limit ),
         CONSTRAINT date_check CHECK (close_date > accounts.open_date)

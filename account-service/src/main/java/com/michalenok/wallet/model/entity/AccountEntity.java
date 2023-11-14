@@ -30,4 +30,6 @@ public class AccountEntity {
     private BigDecimal blockedSum;
     @Column(nullable = false)
     private Boolean isActive;
+    @Version
+    private Instant updatedAt;
 }
