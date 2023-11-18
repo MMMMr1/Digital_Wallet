@@ -1,0 +1,41 @@
+{
+  "namespace": "com.michalenok.wallet.kafka.schema",
+  "type": "record",
+  "name": "Transfer",
+  "fields": [
+    {
+      "name": "accountTo",
+      "type": [
+        "null",
+        "string"
+      ],
+      "logicalType": "UUID",
+      "default": null
+    },
+    {
+      "name": "referenceNumber",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "amount",
+      "type": [
+        "null",
+        "string"
+      ],
+      "logicalType": "BigDecimal",
+      "default": null
+    },
+    {
+      "name": "currencyCode",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    }
+  ]
+}
