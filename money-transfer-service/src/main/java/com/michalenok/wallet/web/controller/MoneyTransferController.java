@@ -1,7 +1,7 @@
 package com.michalenok.wallet.web.controller;
 
 import com.michalenok.wallet.model.dto.request.TransferRequestDto;
-import com.michalenok.wallet.model.entity.OperationEntity;
+import com.michalenok.wallet.model.dto.response.OperationInfoDto;
 import com.michalenok.wallet.service.api.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class MoneyTransferController {
     }
 
     @GetMapping
-    protected Page<OperationEntity> getAll(Pageable pageable) {
+    protected Page<OperationInfoDto> getAll(Pageable pageable) {
         return transferService.getPage(pageable);
     }
 }

@@ -4,6 +4,7 @@ import com.michalenok.wallet.kafka.producer.api.MessageProducer;
 import com.michalenok.wallet.kafka.schema.Transfer;
 import com.michalenok.wallet.mapper.TransferMapper;
 import com.michalenok.wallet.model.dto.request.TransferRequestDto;
+import com.michalenok.wallet.model.dto.response.OperationInfoDto;
 import com.michalenok.wallet.model.entity.OperationEntity;
 import com.michalenok.wallet.model.enums.OperationStatus;
 import com.michalenok.wallet.mapper.OperationMapper;
@@ -63,8 +64,9 @@ public class TransferServiceImpl implements TransferService {
     }
 
     @Override
-    public Page<OperationEntity> getPage(Pageable pageable) {
-        return operationRepository.findAll(pageable);
+    public Page<OperationInfoDto> getPage(Pageable pageable) {
+        return operationRepository.findAll(pageable)
+                .map(operationMapper::toOperationInfoDto);
     }
 
 
