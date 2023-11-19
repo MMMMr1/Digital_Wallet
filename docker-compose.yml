@@ -47,6 +47,7 @@ services:
       - configuration-server
       - discovery-server
       - api-gateway-server
+      - broker
     networks:
       - digital_wallet_ntwrk
 
@@ -59,6 +60,7 @@ services:
       - database-user-service
       - discovery-server
       - api-gateway-server
+      - broker
     networks:
       - digital_wallet_ntwrk
 

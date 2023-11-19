@@ -3,15 +3,15 @@
   "type": "record",
   "name": "Transfer",
   "fields": [
-        {
-          "name": "uuid",
-          "type": [
-            "null",
-            "string"
-          ],
-          "logicalType": "UUID",
-          "default": null
-        },
+      {
+        "name": "uuid",
+        "type": [
+          "null",
+          "string"
+        ],
+        "logicalType": "UUID",
+        "default": null
+      },
     {
       "name": "accountTo",
       "type": [

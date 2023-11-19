@@ -1,0 +1,6 @@
+{
+  "namespace": "com.michalenok.wallet.kafka.schema",
+  "type": "enum",
+  "name": "TransactionStatus",
+  "symbols" : ["SUCCESSFUL", "UNSUCCESSFUL"]
+}

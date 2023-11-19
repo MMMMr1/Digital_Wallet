@@ -1,20 +1,26 @@
 package com.michalenok.wallet.web.controller;
 
 import com.michalenok.wallet.model.dto.request.TransferRequestDto;
+import com.michalenok.wallet.model.entity.OperationEntity;
 import com.michalenok.wallet.service.api.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Log4j2
 @Controller
-@RequestMapping("/api/v1/money_transfers")
+@RequestMapping("/api/v1/money-transfers")
 @RequiredArgsConstructor
 public class MoneyTransferController {
     private final TransferService transferService;
@@ -41,5 +47,10 @@ public class MoneyTransferController {
         log.info("Internal transfer initiated from {}", transferRequestDto.toString());
         transferService.internalFundTransfer(transferRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
+    protected Page<OperationEntity> getAll(Pageable pageable) {
+        return transferService.getPage(pageable);
     }
 }

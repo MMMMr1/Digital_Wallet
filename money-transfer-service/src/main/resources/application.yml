@@ -23,15 +23,30 @@ spring:
   kafka:
     bootstrap-servers: broker:29092
     producer:
-      keySerializer: "org.apache.kafka.common.serialization.UUIDSerializer"
+      keySerializer: "org.apache.kafka.common.serialization.StringSerializer"
       valueSerializer: "io.confluent.kafka.serializers.KafkaAvroSerializer"
       properties:
         schema:
           registry:
             url: http://schema-registry:8081
+    consumer:
+      group-id: money-transfer-service
+      keyDeserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      valueDeserializer: "io.confluent.kafka.serializers.KafkaAvroDeserializer"
+      properties:
+        schema:
+          registry:
+            url: http://schema-registry:8081
+        specific:
+          avro:
+            reader: "true"
+kafka:
+  topic:
+    transaction: transaction_topic
 avro:
   topic:
     name:
+      transaction: transaction_topic
       debit_operation: debit_operation_topic
       credit_operation: credit_operation_topic
       internal_operation: internal_operation_topic

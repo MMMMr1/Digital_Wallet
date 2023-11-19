@@ -1,6 +1,8 @@
 package com.michalenok.wallet.service;
 
 import com.michalenok.wallet.kafka.producer.api.MessageProducer;
+import com.michalenok.wallet.kafka.schema.Transfer;
+import com.michalenok.wallet.mapper.TransferMapper;
 import com.michalenok.wallet.model.dto.request.TransferRequestDto;
 import com.michalenok.wallet.model.entity.OperationEntity;
 import com.michalenok.wallet.model.enums.OperationStatus;
@@ -12,9 +14,10 @@ import com.michalenok.wallet.service.util.UuidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 
 @Log4j2
@@ -23,8 +26,9 @@ import java.time.Instant;
 public class TransferServiceImpl implements TransferService {
 
     private final OperationRepository operationRepository;
-    private final MessageProducer<TransferRequestDto> messageProducer;
+    private final MessageProducer<Transfer> messageProducer;
     private final OperationMapper operationMapper;
+    private final TransferMapper transferMapper;
     @Value("${avro.topic.name.debit_operation}")
     private String debitOperationTopicName;
     @Value("${avro.topic.name.credit_operation}")
@@ -39,7 +43,7 @@ public class TransferServiceImpl implements TransferService {
     public void debitTransfer(TransferRequestDto debit) {
         OperationEntity operationEntity = initializeOperationEntity(debit);
         operationRepository.save(operationEntity);
-        messageProducer.sendMessage(debit, operationEntity.getUuid(), debitOperationTopicName);
+        messageProducer.sendMessage(transferMapper.toTransfer(operationEntity), debitOperationTopicName);
     }
 
     @Override
@@ -47,16 +51,22 @@ public class TransferServiceImpl implements TransferService {
     public void creditTransfer(TransferRequestDto credit) {
         OperationEntity operationEntity = initializeOperationEntity(credit);
         operationRepository.save(operationEntity);
-        messageProducer.sendMessage(credit, operationEntity.getUuid(), creditOperationTopicName);
-    }
+        messageProducer.sendMessage(transferMapper.toTransfer(operationEntity), creditOperationTopicName);
+}
 
     @Override
     @Transactional
     public void internalFundTransfer(TransferRequestDto transfer){
         OperationEntity operationEntity = initializeOperationEntity(transfer);
         operationRepository.save(operationEntity);
-        messageProducer.sendMessage(transfer, operationEntity.getUuid(), internalOperationTopicName);
+        messageProducer.sendMessage(transferMapper.toTransfer(operationEntity), internalOperationTopicName);
     }
+
+    @Override
+    public Page<OperationEntity> getPage(Pageable pageable) {
+        return operationRepository.findAll(pageable);
+    }
+
 
     private OperationEntity initializeOperationEntity(TransferRequestDto dto){
         Instant time = timeGenerationUtil.generateCurrentInstant();

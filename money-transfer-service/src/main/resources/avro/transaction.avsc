@@ -1,7 +1,7 @@
 {
   "namespace": "com.michalenok.wallet.kafka.schema",
   "type": "record",
-  "name": "Transfer",
+  "name": "Transaction",
   "fields": [
         {
           "name": "uuid",
@@ -45,6 +45,15 @@
         "string"
       ],
       "default": null
-    }
+    },
+         {
+           "name": "TransactionStatus",
+           "type": [
+             "null",
+             "string"
+           ],
+           "logicalType": "TransactionStatus",
+           "default": null
+         }
   ]
 }
