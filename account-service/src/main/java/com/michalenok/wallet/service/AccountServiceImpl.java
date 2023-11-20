@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Page<AccountInfoDto> getPage(Pageable paging) {
+    public Page<AccountInfoDto> getAccounts(Pageable paging) {
         return accountRepository.findAll(paging)
                 .map(accountMapper::toAccountInfo);
     }
@@ -91,18 +91,18 @@ public class AccountServiceImpl implements AccountService {
 
     private AccountEntity initializeNewAccount(UUID userUuid) {
         Instant time = timeGenerationUtil.generateCurrentInstant();
-        AccountEntity account = new AccountEntity();
-        account.setAccountNumber(uuidUtil.generateUuid());
-        account.setClientId(userUuid);
-        account.setCurrencyCode("EUR");
-        account.setCurrentBalance(BigDecimal.ZERO);
-        account.setBlockedSum(BigDecimal.ZERO);
-        account.setOpenDate(time);
-        account.setUpdatedAt(time);
-        account.setIsActive(true);
-        account.setMaxLimit(BigDecimal.valueOf(100000));
-        log.info("initialize account {} for user with uuid {}, open date {}",
-                account.getAccountNumber(), account.getClientId(), account.getOpenDate());
-        return account;
+        UUID accountUuid = uuidUtil.generateUuid();
+        log.info("initialize account {} for user with uuid {}, open date {}", userUuid, time);
+        return AccountEntity.builder()
+                .accountNumber(accountUuid)
+                .clientId(userUuid)
+                .currencyCode("EUR")
+                .currentBalance(BigDecimal.ZERO)
+                .blockedSum(BigDecimal.ZERO)
+                .openDate(time)
+                .updatedAt(time)
+                .isActive(true)
+                .maxLimit(BigDecimal.valueOf(100000))
+                .build();
     }
 }

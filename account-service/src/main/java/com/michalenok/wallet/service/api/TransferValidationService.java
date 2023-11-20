@@ -3,9 +3,9 @@ package com.michalenok.wallet.service.api;
 import com.michalenok.wallet.model.dto.request.TransferRequestDto;
 
 public interface TransferValidationService {
-    void isValidDebitTransfer(TransferRequestDto debit);
+    void validateDebitTransfer(TransferRequestDto debit);
 
-    void isValidCreditTransfer(TransferRequestDto credit);
+    void validateCreditTransfer(TransferRequestDto credit);
 
-    void isValidInternalFundTransfer(TransferRequestDto transfer);
+    void validateInternalFundTransfer(TransferRequestDto transfer);
 }

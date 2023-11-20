@@ -3,13 +3,15 @@ package com.michalenok.wallet.model.entity;
 import com.michalenok.wallet.model.enums.TransferType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "transfers", schema = "app")
 public class TransferEntity {

@@ -13,7 +13,7 @@ public interface AccountService {
 
     AccountInfoDto close(UUID accountUuid);
 
-    Page<AccountInfoDto> getPage(Pageable paging);
+    Page<AccountInfoDto> getAccounts(Pageable paging);
 
     AccountInfoDto findByAccountId(UUID uuid);
 
