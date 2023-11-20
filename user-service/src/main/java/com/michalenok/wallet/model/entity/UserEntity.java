@@ -12,6 +12,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.Instant;
@@ -26,8 +27,11 @@ public class UserEntity {
     @Id
     @Column(name = "uuid", nullable = false)
     private UUID uuid;
+    @NotNull
     private String mail;
+    @NotNull
     private String mobilePhone;
+    @NotNull
     private String password;
     @Enumerated(EnumType.ORDINAL)
     @ElementCollection
@@ -40,7 +44,9 @@ public class UserEntity {
     private Set<UserRole> role;
     @Enumerated(EnumType.ORDINAL)
     private UserStatus status;
+    @NotNull
     private Instant createdAt;
     @Version
+    @NotNull
     private Instant updatedAt;
 }

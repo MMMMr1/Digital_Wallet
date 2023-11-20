@@ -3,8 +3,9 @@ package com.michalenok.wallet.model.exception;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class InvalidVersionException extends RuntimeException {
-    public InvalidVersionException(String message) {
+public class CurrencyCodeMismatchException extends RuntimeException {
+
+    public CurrencyCodeMismatchException(String message) {
         super(message);
     }
 }

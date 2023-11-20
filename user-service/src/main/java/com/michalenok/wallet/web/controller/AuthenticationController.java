@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService service;
 
-
     @Operation(summary = "AS1: Register client", tags = "authorization")
     @PostMapping(path = "/registration")
     protected ResponseEntity<?> create(

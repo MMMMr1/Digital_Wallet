@@ -3,7 +3,10 @@ package com.michalenok.wallet.web;
 import com.michalenok.wallet.model.error.ExceptionErrorDTO;
 import com.michalenok.wallet.model.error.ExceptionListDTO;
 import com.michalenok.wallet.model.error.ExceptionStructuredDTO;
-import com.michalenok.wallet.model.exception.*;
+import com.michalenok.wallet.model.exception.AccountNotFoundException;
+import com.michalenok.wallet.model.exception.CurrencyCodeMismatchException;
+import com.michalenok.wallet.model.exception.ExceedingBalanceLimitException;
+import com.michalenok.wallet.model.exception.InsufficientFundsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,32 +28,22 @@ public class ExceptionGlobal {
                 .map(s -> new ExceptionStructuredDTO(s.getField(), s.getDefaultMessage()))
                 .collect(Collectors.toList()));
     }
-
     /**
      * 400
      */
-    @ExceptionHandler(value = {UserNotFoundException.class, VerificationUserException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionErrorDTO argumentUserNotFoundException(
+    @ExceptionHandler(value = {ExceedingBalanceLimitException.class, InsufficientFundsException.class, CurrencyCodeMismatchException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionErrorDTO ArgumentTransferException(
             RuntimeException e) {
         return new ExceptionErrorDTO(e.getMessage());
     }
 
     /**
-     * 409
+     * 404
      */
-    @ExceptionHandler(UserAlreadyExistException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ExceptionErrorDTO argumentUserAlreadyExistException(
-            RuntimeException e) {
-        return new ExceptionErrorDTO(e.getMessage());
-    }
-    /**
-     * 503
-     */
-    @ExceptionHandler(AccountServiceNotFoundException.class)
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    public ExceptionErrorDTO accountServiceNotFoundException(
+    @ExceptionHandler(value = AccountNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionErrorDTO ArgumentAccountNotFoundException(
             RuntimeException e) {
         return new ExceptionErrorDTO(e.getMessage());
     }
