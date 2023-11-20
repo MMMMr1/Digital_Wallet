@@ -15,21 +15,21 @@ public class TransferController {
 
     private final TransferService transferService;
 
-    @Operation(summary = "TS1: Account replenishment", tags = "transfers")
+    @Operation(summary = "Account replenishment", tags = "transfers")
     @PostMapping("/debit-transfer")
     public void debitTransfer(@RequestBody TransferRequestDto debitTransferRequest) {
         log.info("Debit transfer initiated from {}", debitTransferRequest.toString());
         transferService.debitTransfer(debitTransferRequest);
     }
 
-    @Operation(summary = "TS2: Cash transfer from the account", tags = "transfers")
+    @Operation(summary = "Cash transfer from the account", tags = "transfers")
     @PostMapping("/credit-transfer")
     public void creditPayment(@RequestBody TransferRequestDto creditTransferRequest) {
         log.info("Credit transfer initiated from {}", creditTransferRequest.toString());
         transferService.creditTransfer(creditTransferRequest);
     }
 
-    @Operation(summary = "TS3: Internal transfer of funds", tags = "transfers")
+    @Operation(summary = "Internal transfer of funds", tags = "transfers")
     @PostMapping("/internal-transfer")
     public void internalPayment(@RequestBody TransferRequestDto transferRequestDto) {
         log.info("Internal transfer initiated from {}", transferRequestDto.toString());

@@ -22,30 +22,33 @@ public class TransferValidationServiceImpl implements TransferValidationService 
     private final AccountService accountService;
 
     @Override
-    public void isValidDebitTransfer(TransferRequestDto debit) {
+    public void validateDebitTransfer(TransferRequestDto debit) {
         AccountInfoDto account = accountService.findByAccountId(debit.accountTo());
-        isActive(account);
-        checkCurrencyCode(account, debit.currencyCode());
+        validateIfActive(account);
+        validateCurrencyCode(account, debit.currencyCode());
         validateDebitBalance(account, debit.amount());
     }
 
     @Override
-    public void isValidCreditTransfer(TransferRequestDto credit) {
+    public void validateCreditTransfer(TransferRequestDto credit) {
         AccountInfoDto account = accountService.findByAccountId(credit.accountTo());
-        isActive(account);
-        checkCurrencyCode(account, credit.currencyCode());
+        validateIfActive(account);
+        validateCurrencyCode(account, credit.currencyCode());
         validateCreditBalance(account, credit.amount());
     }
 
     @Override
-    public void isValidInternalFundTransfer(TransferRequestDto transfer) {
+    public void validateInternalFundTransfer(TransferRequestDto transfer) {
         AccountInfoDto accountTo = accountService.findByAccountId(transfer.accountTo());
         AccountInfoDto accountFrom = accountService.findByAccountId(UUID.fromString(transfer.referenceNumber()));
-        isActive(accountTo);
-        isActive(accountFrom);
-        checkCurrencyCode(accountTo, accountFrom.currencyCode());
-        checkCurrencyCode(accountTo, transfer.currencyCode());
-        checkCurrencyCode(accountFrom, transfer.currencyCode());
+
+        validateIfActive(accountTo);
+        validateIfActive(accountFrom);
+
+        validateCurrencyCode(accountTo, accountFrom.currencyCode());
+        validateCurrencyCode(accountTo, transfer.currencyCode());
+        validateCurrencyCode(accountFrom, transfer.currencyCode());
+
         validateCreditBalance(accountTo, transfer.amount());
         validateDebitBalance(accountFrom, transfer.amount());
     }
@@ -63,13 +66,13 @@ public class TransferValidationServiceImpl implements TransferValidationService 
         }
     }
 
-    private void isActive(AccountInfoDto account) {
-        if (!Objects.equals(account.isActive(), Boolean.TRUE)) {
+    private void validateIfActive(AccountInfoDto account) {
+        if (!account.isActive()) {
             throw new AccountNotActiveException(String.format("Account with uuid {%s} not active", account.accountNumber()));
         }
     }
 
-    private void checkCurrencyCode(AccountInfoDto account, String currencyCode) {
+    private void validateCurrencyCode(AccountInfoDto account, String currencyCode) {
         if (!Objects.equals(account.currencyCode(), currencyCode)) {
             throw new CurrencyCodeMismatchException(String.format("Account with uuid {%s} has another currency code", account.accountNumber()));
         }

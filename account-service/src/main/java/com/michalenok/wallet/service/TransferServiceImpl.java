@@ -30,7 +30,7 @@ public class TransferServiceImpl implements TransferService {
     @Override
     @Transactional
     public TransferInfoDto debitTransfer(TransferRequestDto debit) {
-        validationService.isValidDebitTransfer(debit);
+        validationService.validateDebitTransfer(debit);
         AccountInfoDto account = accountService.findByAccountId(debit.accountTo());
         accountService.updateCurrentBalance(debit.accountTo(), account.currentBalance().add(debit.amount()));
         log.info("debit debit for account {}, amount {}", debit.accountTo(), debit.amount());
@@ -40,7 +40,7 @@ public class TransferServiceImpl implements TransferService {
     @Override
     @Transactional
     public TransferInfoDto creditTransfer(TransferRequestDto credit) {
-        validationService.isValidCreditTransfer(credit);
+        validationService.validateCreditTransfer(credit);
         AccountInfoDto account = accountService.findByAccountId(credit.accountTo());
         accountService.updateCurrentBalance(credit.accountTo(), account.currentBalance().add(credit.amount().negate()));
         log.info("credit transfer for account {}, amount {}", credit.accountTo(), credit.amount());
@@ -50,9 +50,11 @@ public class TransferServiceImpl implements TransferService {
     @Override
     @Transactional
     public TransferInfoDto internalFundTransfer(TransferRequestDto transfer){
-        validationService.isValidInternalFundTransfer(transfer);
+        validationService.validateInternalFundTransfer(transfer);
+
         AccountInfoDto accountTo = accountService.findByAccountId(transfer.accountTo());
         AccountInfoDto accountFrom = accountService.findByAccountId(UUID.fromString(transfer.referenceNumber()));
+
         accountService.updateCurrentBalance(accountFrom.accountNumber(), accountFrom.currentBalance().add(transfer.amount().negate()));
         accountService.updateCurrentBalance(accountTo.accountNumber(), accountTo.currentBalance().add(transfer.amount()));
         log.info("internal fund transfer [{}]", transfer.toString());
@@ -60,18 +62,19 @@ public class TransferServiceImpl implements TransferService {
     }
 
     private TransferInfoDto saveTransaction(TransferRequestDto transfer, TransferType transactionType){
-        TransferEntity transactionEntity = new TransferEntity();
-        transactionEntity.setTransactionUuid(uuidUtil.generateUuid());
-        transactionEntity.setCreatedAt(timeGenerationUtil.generateCurrentInstant());
-        transactionEntity.setAccountEntity(accountService.getAccount(transfer.accountTo()));
-        transactionEntity.setTransactionType(transactionType);
-        transactionEntity.setReferenceNumber(transfer.referenceNumber());
-        transactionEntity.setCurrencyCode(transfer.currencyCode());
-        transactionEntity.setAmount(transfer.amount());
-        transactionRepository.save(transactionEntity);
-        log.info("save transaction with uuid [{}]", transactionEntity.toString());
+        TransferEntity transferEntity = TransferEntity.builder()
+                .transactionUuid(uuidUtil.generateUuid())
+                .accountEntity(accountService.getAccount(transfer.accountTo()))
+                .transactionType(transactionType)
+                .referenceNumber(transfer.referenceNumber())
+                .currencyCode(transfer.currencyCode())
+                .amount(transfer.amount())
+                .createdAt(timeGenerationUtil.generateCurrentInstant())
+                .build();
+        transactionRepository.save(transferEntity);
+        log.info("save transaction with uuid [{}]", transferEntity.toString());
         return TransferInfoDto.builder()
-                .transactionId(transactionEntity.getTransactionUuid())
+                .transactionId(transferEntity.getTransactionUuid())
                 .message("Transfer successfully completed")
                 .build();
     }
