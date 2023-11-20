@@ -1,7 +1,7 @@
 package com.michalenok.wallet.web.controller;
 
 import com.michalenok.wallet.model.dto.request.TransferRequestDto;
-import com.michalenok.wallet.model.dto.response.OperationInfoDto;
+import com.michalenok.wallet.model.dto.response.TransferInfoDto;
 import com.michalenok.wallet.service.api.TransferService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Log4j2
 @Controller
@@ -49,8 +47,9 @@ public class MoneyTransferController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Operation(summary = "All transfers of funds", tags = "transfers")
     @GetMapping
-    protected Page<OperationInfoDto> getAll(Pageable pageable) {
+    protected Page<TransferInfoDto> getAll(Pageable pageable) {
         return transferService.getPage(pageable);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaConfiguration {
     @Bean
     public NewTopic topics() {
-        return TopicBuilder.name("transaction_topic")
+        return TopicBuilder.name("transaction_broker")
                         .replicas(1)
                         .partitions(1)
                         .build();

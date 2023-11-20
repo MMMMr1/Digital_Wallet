@@ -45,6 +45,15 @@
         "string"
       ],
       "default": null
+    },
+    {
+      "name": "type",
+      "type": [
+         "null",
+         "string"
+      ],
+         "logicalType": "TransferType",
+         "default": null
     }
   ]
 }

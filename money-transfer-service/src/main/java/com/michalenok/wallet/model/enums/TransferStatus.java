@@ -1,6 +1,6 @@
 package com.michalenok.wallet.model.enums;
 
-public enum OperationStatus {
+public enum TransferStatus {
     CREATED,
     COMPLETED,
     FAILED;

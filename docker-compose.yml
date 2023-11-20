@@ -9,6 +9,15 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - digital_wallet_ntwrk
+  database-money-transfer-service:
+    image: postgres:15.2-alpine
+    platform: linux/amd64
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - digital_wallet_ntwrk
 
   user-service:
     build: ./user-service
@@ -57,7 +66,7 @@ services:
     platform: linux/amd64
     image: money-transfer-service:1.0.0
     depends_on:
-      - database-user-service
+      - database-money-transfer-service
       - discovery-server
       - api-gateway-server
       - broker

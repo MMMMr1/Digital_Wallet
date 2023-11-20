@@ -47,7 +47,7 @@
       "default": null
     },
          {
-           "name": "TransactionStatus",
+           "name": "status",
            "type": [
              "null",
              "string"
