@@ -19,7 +19,6 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
-
   kafka:
     bootstrap-servers: broker:29092
     producer:

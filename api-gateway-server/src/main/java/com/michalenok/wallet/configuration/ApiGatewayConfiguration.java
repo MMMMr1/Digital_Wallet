@@ -63,6 +63,8 @@ public class ApiGatewayConfiguration {
                 .route("money-transfer-service", r -> r.path(
                                 "/api/v1/money-transfers/{segment}",
                                 "/api/v1/money-transfers",
+                                "/api/v1/money-transfers/details",
+                                "/api/v1/money-transfers/details/**",
                                 "/money-transfer-service/v3/api-docs")
                         .filters(f -> f.addRequestHeader("Is-Proxy-Request", "true")
                                 .circuitBreaker(c -> c.setName("accountServiceCommonCircuitBreaker")

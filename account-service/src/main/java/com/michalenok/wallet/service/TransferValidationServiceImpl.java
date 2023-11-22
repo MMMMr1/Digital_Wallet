@@ -49,8 +49,8 @@ public class TransferValidationServiceImpl implements TransferValidationService 
         validateCurrencyCode(accountTo, transfer.currencyCode());
         validateCurrencyCode(accountFrom, transfer.currencyCode());
 
-        validateCreditBalance(accountTo, transfer.amount());
-        validateDebitBalance(accountFrom, transfer.amount());
+        validateCreditBalance(accountFrom, transfer.amount());
+        validateDebitBalance(accountTo, transfer.amount());
     }
 
     private void validateDebitBalance(AccountInfoDto account, BigDecimal amount) {
