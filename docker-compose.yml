@@ -65,7 +65,15 @@ services:
     container_name: wallet-money-transfer-service
     platform: linux/amd64
     image: money-transfer-service:1.0.0
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_APPLICATION_NAME: money-transfer-service
+      SPRING_CLOUD_CONFIG_PROFILE: dev
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
+      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 20
     depends_on:
+      - configuration-server
       - database-money-transfer-service
       - discovery-server
       - api-gateway-server

@@ -31,8 +31,8 @@ public interface TransferRepository extends JpaRepository<TransferEntity, UUID>,
     @Query("""
     SELECT transfer
     FROM TransferEntity transfer
-    WHERE transfer.type='INTERNAL' AND transfer.accountTo=:accountUuid
-          OR transfer.referenceNumber=:referenceNumber
+    WHERE transfer.type='INTERNAL' 
+          AND (transfer.accountTo=:accountUuid OR transfer.referenceNumber=:referenceNumber)
     """)
     List<TransferEntity> getInternalTransfers(@Param("accountUuid") UUID accountUuid,
                                               @Param("referenceNumber") String referenceNumber);
@@ -40,8 +40,8 @@ public interface TransferRepository extends JpaRepository<TransferEntity, UUID>,
     @Query("""
     SELECT transfer
     FROM TransferEntity transfer
-    WHERE transfer.accountTo=:accountUuid 
-          OR (transfer.referenceNumber=:referenceNumber AND transfer.type='INTERNAL') 
+    WHERE (transfer.accountTo=:accountUuid 
+          OR (transfer.referenceNumber=:referenceNumber AND transfer.type='INTERNAL'))
           AND (transfer.createdAt BETWEEN :timeAfter AND :timeBefore)
     """)
     List<TransferEntity> findByPeriod(@Param("accountUuid") UUID accountUuid,
