@@ -1,14 +1,19 @@
 package com.michalenok.wallet.service;
 
+import com.michalenok.wallet.kafka.schema.TransferType;
 import com.michalenok.wallet.mapper.TransferMapper;
 import com.michalenok.wallet.model.dto.exception.TransferNotFoundException;
 import com.michalenok.wallet.model.dto.response.TransferInfoDto;
+import com.michalenok.wallet.model.entity.TransferEntity;
+import com.michalenok.wallet.model.enums.TransferStatus;
 import com.michalenok.wallet.repository.TransferRepository;
 import com.michalenok.wallet.service.api.TransferDetailsService;
+import com.michalenok.wallet.service.util.TransferSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
@@ -26,6 +31,15 @@ public class TransferDetailsServiceImpl implements TransferDetailsService {
     public Page<TransferInfoDto> getTransfers(Pageable pageable) {
         log.info("get page total elements {}", transferRepository.findAll(pageable).getTotalElements());
         return transferRepository.findAll(pageable)
+                .map(transferMapper::transferEntityToTransferInfoDto);
+    }
+    public Page<TransferInfoDto> searchTransfers(TransferType transferType,
+                                                 TransferStatus transferStatus,
+                                                 Instant timeAfter,
+                                                 Instant timeBefore,
+                                                 Pageable pageable){
+        Specification<TransferEntity> search = TransferSpecification.search(transferType, transferStatus, timeAfter, timeBefore);
+        return transferRepository.findAll(search, pageable)
                 .map(transferMapper::transferEntityToTransferInfoDto);
     }
 
