@@ -18,14 +18,14 @@ public class MoneyTransferController {
 
     @Operation(summary = "Account replenishment", tags = "transfers")
     @PostMapping("/debit-transfer")
-    public TransferInfoDto debitTransfer(@RequestBody TransferRequestDto debitTransferRequest) {
+    public TransferInfoDto debitTransfer(@RequestBody @Validated TransferRequestDto debitTransferRequest) {
         log.info("Debit transfer initiated from {}", debitTransferRequest.toString());
         return transferService.debitTransfer(debitTransferRequest);
     }
 
     @Operation(summary = "Cash transfer from the account", tags = "transfers")
     @PostMapping("/credit-transfer")
-    public TransferInfoDto creditPayment(@RequestBody TransferRequestDto creditTransferRequest) {
+    public TransferInfoDto creditPayment(@RequestBody @Validated TransferRequestDto creditTransferRequest) {
         log.info("Credit transfer initiated from {}", creditTransferRequest.toString());
         return transferService.creditTransfer(creditTransferRequest);
     }

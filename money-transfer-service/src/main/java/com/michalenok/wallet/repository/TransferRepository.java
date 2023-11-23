@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,16 +35,4 @@ public interface TransferRepository extends JpaRepository<TransferEntity, UUID>,
     """)
     List<TransferEntity> getInternalTransfers(@Param("accountUuid") UUID accountUuid,
                                               @Param("referenceNumber") String referenceNumber);
-
-    @Query("""
-    SELECT transfer
-    FROM TransferEntity transfer
-    WHERE (transfer.accountTo=:accountUuid 
-          OR (transfer.referenceNumber=:referenceNumber AND transfer.type='INTERNAL'))
-          AND (transfer.createdAt BETWEEN :timeAfter AND :timeBefore)
-    """)
-    List<TransferEntity> findByPeriod(@Param("accountUuid") UUID accountUuid,
-                                      @Param("referenceNumber") String referenceNumber,
-                                      @Param("timeAfter") Instant timeAfter,
-                                      @Param("timeBefore") Instant timeBefore);
 }

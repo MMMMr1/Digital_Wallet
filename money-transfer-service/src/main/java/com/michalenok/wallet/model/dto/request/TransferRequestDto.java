@@ -6,8 +6,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record TransferRequestDto(@NotBlank
-                                 @Schema(defaultValue = "ebf96539-bd68-4cc1-9811-9d8482f157b8", description = "Account uuid")
+public record TransferRequestDto(@Schema(defaultValue = "ebf96539-bd68-4cc1-9811-9d8482f157b8", description = "Account uuid")
                                  UUID accountTo,
                                  @NotBlank
                                  @Schema(defaultValue = "ebf96539-bd68-4cc1-9811-9d8482f157b8", description = "Referebce number or uuid")
