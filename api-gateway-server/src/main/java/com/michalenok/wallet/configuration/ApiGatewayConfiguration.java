@@ -68,7 +68,7 @@ public class ApiGatewayConfiguration {
                                 "/money-transfer-service/v3/api-docs")
                         .filters(f -> f.addRequestHeader("Is-Proxy-Request", "true")
                                 .circuitBreaker(c -> c.setName("accountServiceCommonCircuitBreaker")
-                                        .setFallbackUri("forward:/fallback/account-service-common-fallback")))
+                                        .setFallbackUri("forward:/fallback/money-transfer-service-common-fallback")))
                         .uri("lb://money-transfer-service"))
                 .build();
     }
