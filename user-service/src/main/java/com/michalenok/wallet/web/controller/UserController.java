@@ -4,6 +4,10 @@ import com.michalenok.wallet.model.dto.request.UserCreateDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
 import com.michalenok.wallet.service.api.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,7 +26,12 @@ import java.util.UUID;
 public class UserController {
     private final UserService service;
   
-    @Operation(summary = "US1: Register client in application", tags = "users")
+    @Operation(summary = "Register client in application", tags = "users",
+    security = @SecurityRequirement(name = "security_auth"))
+    @ApiResponses({
+            @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     @PostMapping
     protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
         log.info("create {}", user);
@@ -30,20 +39,35 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "US2: Loading of all clients", tags = "users") 
+    @Operation(summary = "Loading of all clients", tags = "users",
+            security = @SecurityRequirement(name = "security_auth"))
+    @ApiResponses({
+            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
     }
  
-    @Operation(summary = "US3: Loading of client by uuid", tags = "users") 
+    @Operation(summary = "Loading of client by uuid", tags = "users",
+            security = @SecurityRequirement(name = "security_auth"))
+    @ApiResponses({
+            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     @GetMapping(path = "/{uuid}")
     public UserInfoDto get(@PathVariable("uuid") UUID uuid) {
         log.info("get user with {}", uuid);
         return service.findById(uuid);
     } 
   
-    @Operation(summary = "US4: Update client by uuid", tags = "users")
+    @Operation(summary = "Update client by uuid", tags = "users",
+            security = @SecurityRequirement(name = "security_auth"))
+    @ApiResponses({
+            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     @PutMapping(path = "/{uuid}")
     public void update(@PathVariable("uuid") UUID uuid,
                        @Valid @RequestBody UserCreateDto user) {

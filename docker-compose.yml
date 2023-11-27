@@ -10,6 +10,16 @@ services:
     networks:
       - digital_wallet_ntwrk
 
+  database-keycloak:
+    image: postgres:15.2-alpine
+    platform: linux/amd64
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - digital_wallet_ntwrk
+
   user-service:
     build: ./user-service
     container_name: wallet-user-service
@@ -25,7 +35,7 @@ services:
     depends_on:
       - database-user-service
       - configuration-server
-      - discovery-server 
+      - discovery-server
       - api-gateway-server
     networks:
       - digital_wallet_ntwrk
@@ -99,6 +109,21 @@ services:
     networks:
       - digital_wallet_ntwrk
 
+  keycloak:
+    image: jboss/keycloak
+    restart: on-failure
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/wallet_keycloak.json
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/wallet_keycloak.json:/tmp/wallet_keycloak.json
+    depends_on:
+      -  database-keycloak
+    networks:
+      - digital_wallet_ntwrk
 networks:
   digital_wallet_ntwrk:
     name: digital_wallet_ntwrk
