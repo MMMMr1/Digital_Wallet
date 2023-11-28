@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "authorization")
-@SecurityRequirement(name = "security_auth")
+//@SecurityRequirement(name = "security_auth")
 @Log4j2
 @RequiredArgsConstructor
 @RestController

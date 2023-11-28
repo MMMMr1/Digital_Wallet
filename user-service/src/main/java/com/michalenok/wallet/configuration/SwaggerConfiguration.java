@@ -56,6 +56,8 @@ public class SwaggerConfiguration {
     private OAuthFlow createTokenUrlOAuthFlow() {
         return new OAuthFlow()
                 .tokenUrl(tokenUrl)
-                .scopes(new Scopes());
+                .scopes(new Scopes()
+                        .addString("perform_all_operations",
+                                "full_access_scope"));
     }
 }

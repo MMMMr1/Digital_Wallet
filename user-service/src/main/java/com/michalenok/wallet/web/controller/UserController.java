@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @Tag(name = "users")
-@SecurityRequirement(name = "security_auth")
+//@SecurityRequirement(name = "security_auth")
 @Log4j2
 @RestController
 @RequestMapping("/api/v1/users")
@@ -41,7 +41,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Loading of all clients")
+    @Operation(summary = "Loading of all clients",
+            security = @SecurityRequirement(name = "security_auth",
+                    scopes = {"perform_all_operations"}))
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
