@@ -38,7 +38,7 @@ public class SwaggerConfiguration {
                         .description(appDescription))
                 .servers(List.of(new Server().url(url)))
                 .components(new Components()
-                .addSecuritySchemes(securitySchemeName, createOAuthScheme()))
+                        .addSecuritySchemes(securitySchemeName, createOAuthScheme()))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName));
     }
 

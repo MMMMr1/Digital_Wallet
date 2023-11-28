@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
+@Tag(name = "users")
+@SecurityRequirement(name = "security_auth")
 @Log4j2
 @RestController
 @RequestMapping("/api/v1/users")
@@ -26,12 +29,11 @@ import java.util.UUID;
 public class UserController {
     private final UserService service;
   
-    @Operation(summary = "Register client in application", tags = "users")
-//    security = @SecurityRequirement(name = "security_auth"))
-//    @ApiResponses({
-//            @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
-//            @ApiResponse(responseCode = "500", description = "Server Error")
-//    })
+    @Operation(summary = "Register client in application")
+    @ApiResponses({
+            @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     @PostMapping
     protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
         log.info("create {}", user);
@@ -39,20 +41,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Loading of all clients", tags = "users")
-//            ,
-//            security = @SecurityRequirement(name = "security_auth"))
-//    @ApiResponses({
-//            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
-//            @ApiResponse(responseCode = "500", description = "Server Error")
-//    })
+    @Operation(summary = "Loading of all clients")
+    @ApiResponses({
+            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
     }
  
-    @Operation(summary = "Loading of client by uuid", tags = "users",
-            security = @SecurityRequirement(name = "security_auth"))
+    @Operation(summary = "Loading of client by uuid")
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
@@ -63,8 +62,7 @@ public class UserController {
         return service.findById(uuid);
     } 
   
-    @Operation(summary = "Update client by uuid", tags = "users",
-            security = @SecurityRequirement(name = "security_auth"))
+    @Operation(summary = "Update client by uuid")
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "authorization")
+@SecurityRequirement(name = "security_auth")
 @Log4j2
 @RequiredArgsConstructor
 @RestController
@@ -22,8 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService service;
 
-    @Operation(summary ="Register client", tags = "authorization",
-            security = @SecurityRequirement(name = "security_auth"))
+    @Operation(summary ="Register client")
     @ApiResponses({
             @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
@@ -36,8 +38,7 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Verify client", tags = "authorization",
-            security = @SecurityRequirement(name = "security_auth"))
+    @Operation(summary = "Verify client")
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
@@ -50,8 +51,7 @@ public class AuthenticationController {
         log.info("Authentication of user with mail: {} is successful", mail);
     }
   
-    @Operation(summary = "Authenticate client", tags = "authorization",
-            security = @SecurityRequirement(name = "security_auth"))
+    @Operation(summary = "Authenticate client")
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
