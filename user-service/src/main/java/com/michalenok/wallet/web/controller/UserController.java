@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @Tag(name = "users")
-//@SecurityRequirement(name = "security_auth")
 @Log4j2
 @RestController
 @RequestMapping("/api/v1/users")
@@ -42,12 +41,12 @@ public class UserController {
     }
 
     @Operation(summary = "Loading of all clients",
-            security = @SecurityRequirement(name = "security_auth",
-                    scopes = {"perform_all_operations"}))
+            security = @SecurityRequirement(name = "security_auth" ))
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
+
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);

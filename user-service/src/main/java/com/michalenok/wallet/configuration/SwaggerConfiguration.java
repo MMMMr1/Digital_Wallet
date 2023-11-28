@@ -14,13 +14,6 @@ import java.util.List;
 
 @Configuration
 @OpenAPIDefinition
-//@SecurityScheme(name = "security_auth",
-//        type = SecuritySchemeType.OAUTH2,
-//        flows = @OAuthFlows(
-//                password = @OAuthFlow(tokenUrl = "${openapi.oAuthFlow.tokenUrl}",
-//                scopes = {
-//                @OAuthScope(name = "openid", description = "openid scope")
-//        })))
 public class SwaggerConfiguration {
     @Value("${openapi.oAuthFlow.tokenUrl}")
     private String tokenUrl;
@@ -56,8 +49,6 @@ public class SwaggerConfiguration {
     private OAuthFlow createTokenUrlOAuthFlow() {
         return new OAuthFlow()
                 .tokenUrl(tokenUrl)
-                .scopes(new Scopes()
-                        .addString("perform_all_operations",
-                                "full_access_scope"));
+                .scopes(new Scopes());
     }
 }
