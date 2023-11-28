@@ -18,16 +18,16 @@ public class WalletApiGatewayServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WalletApiGatewayServerApplication.class, args);
 	}
-//	@Bean
-//	public CorsWebFilter corsWebFilter() {
-//		final CorsConfiguration corsConfig = new CorsConfiguration();
-//		corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:8072"));
-//		corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "HEAD", "PUT"));
-//		corsConfig.addAllowedHeader("Access-Control-Allow-Origin");
-//
-//		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		source.registerCorsConfiguration("/**", corsConfig);
-//
-//		return new CorsWebFilter(source);
-//	}
+	@Bean
+	public CorsWebFilter corsWebFilter() {
+		final CorsConfiguration corsConfig = new CorsConfiguration();
+		corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:8072"));
+		corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "HEAD", "PUT"));
+		corsConfig.addAllowedHeader("Access-Control-Allow-Origin");
+
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfig);
+
+		return new CorsWebFilter(source);
+	}
 }
