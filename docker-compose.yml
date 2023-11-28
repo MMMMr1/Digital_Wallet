@@ -17,48 +17,51 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: keycloak_db
     networks:
       - digital_wallet_ntwrk
+    volumes:
+      - keycloak_db_vlm:/var/lib/postgresql/data
 
   user-service:
     build: ./user-service
     container_name: wallet-user-service
     platform: linux/amd64
     image: user-service:1.0.0
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      SPRING_APPLICATION_NAME: user-service
-      SPRING_CLOUD_CONFIG_PROFILE: dev
-      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
-      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
-      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 20
+#    environment:
+#      SPRING_PROFILES_ACTIVE: dev
+#      SPRING_APPLICATION_NAME: user-service
+#      SPRING_CLOUD_CONFIG_PROFILE: dev
+#      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
+#      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+#      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 20
     depends_on:
       - database-user-service
-      - configuration-server
+#      - configuration-server
       - discovery-server
       - api-gateway-server
     networks:
       - digital_wallet_ntwrk
 
-  account-service:
-    build: ./account-service
-    container_name: wallet-account-service
-    platform: linux/amd64
-    image: account-service:1.0.0
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      SPRING_APPLICATION_NAME: account-service
-      SPRING_CLOUD_CONFIG_PROFILE: dev
-      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
-      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
-      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 50
-    depends_on:
-      - database-user-service
-      - configuration-server
-      - discovery-server
-      - api-gateway-server
-    networks:
-      - digital_wallet_ntwrk
+#  account-service:
+#    build: ./account-service
+#    container_name: wallet-account-service
+#    platform: linux/amd64
+#    image: account-service:1.0.0
+#    environment:
+#      SPRING_PROFILES_ACTIVE: dev
+#      SPRING_APPLICATION_NAME: account-service
+#      SPRING_CLOUD_CONFIG_PROFILE: dev
+#      SPRING_CONFIG_IMPORT: optional:configserver:http://configuration-server:8888
+#      SPRING_CLOUD_CONFIG_FAIL_FAST: 'true'
+#      SPRING_CLOUD_CONFIG_RETRY_MAX_ATTEMPTS: 50
+#    depends_on:
+#      - database-user-service
+#      - configuration-server
+#      - discovery-server
+#      - api-gateway-server
+#    networks:
+#      - digital_wallet_ntwrk
 
   discovery-server:
     build: discovery-server
@@ -81,7 +84,7 @@ services:
     ports:
       - 8072:8072
     depends_on:
-      - configuration-server
+#      - configuration-server
       - discovery-server
     networks:
       - digital_wallet_ntwrk
@@ -112,18 +115,37 @@ services:
   keycloak:
     image: jboss/keycloak
     restart: on-failure
+#    environment:
+#      KEYCLOAK_USER: admin
+#      KEYCLOAK_PASSWORD: admin
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      KEYCLOAK_IMPORT: /tmp/wallet_keycloak.json
+      - KEYCLOAK_USER=${POSTGRES_USER}
+      - KEYCLOAK_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_VENDOR=postgres
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_ADDR=database-keycloak
+      - DB_PORT=5432
+      - DB_DATABASE=keycloak_db
+      - KEYCLOAK_IMPORT=/tmp/wallet_keycloak.json
     ports:
       - "8080:8080"
     volumes:
       - ./keycloak/wallet_keycloak.json:/tmp/wallet_keycloak.json
+#      KEYCLOAK_IMPORT: /tmp/wallet_keycloak.json
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./keycloak/wallet_keycloak.json:/tmp/wallet_keycloak.json
     depends_on:
       -  database-keycloak
     networks:
       - digital_wallet_ntwrk
+
+volumes:
+  keycloak_db_vlm:
+    name: keycloak_db_vlm
+
 networks:
   digital_wallet_ntwrk:
     name: digital_wallet_ntwrk

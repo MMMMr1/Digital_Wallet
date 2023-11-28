@@ -1,6 +1,6 @@
 {
   "id": "wallet",
-  "realm": "wallet-realm",
+  "realm": "wallet",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -43,6 +43,7 @@
   "quickLoginCheckMilliSeconds": 1000,
   "maxDeltaTimeSeconds": 43200,
   "failureFactor": 30,
+
   "defaultRole": {
     "id": "23e9eb45-c48e-41b5-b16e-5ef980f1e80f",
     "name": "default-roles-wallet",
