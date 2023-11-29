@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AccountServiceFeignClient accountServiceFeignClient;
+
     private final UserMapper userMapper;
     private final TimeGenerationUtil timeGenerationUtil;
     private final UuidUtil uuidUtil;
@@ -116,11 +118,35 @@ public class UserServiceImpl implements UserService {
                 user.getMail(), user.getUuid(), user.getCreatedAt(), user.getUpdatedAt());
     }
 
-    private void createDefaultAccount(UserEntity user){
-        if (Objects.equals(user.getStatus(),UserStatus.ACTIVATED) &&
-                user.getRole().contains(UserRole.USER)){
+    private void createDefaultAccount(UserEntity user) {
+        if (Objects.equals(user.getStatus(), UserStatus.ACTIVATED) &&
+                user.getRole().contains(UserRole.USER)) {
             accountServiceFeignClient.createAccount(user.getUuid());
         }
         log.info("Create default account for user: {}", user.getMail());
     }
+
+//    public void addUser(UserCreateDto user) {
+//        UsersResource usersResource = KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users();
+//        log.info("usersResource {}", usersResource);
+//        CredentialRepresentation credentialRepresentation = createPasswordCredentials(user.password());
+//        log.info("credentialRepresentation {}", createPasswordCredentials(user.password()));
+//        UserRepresentation kcUser = new UserRepresentation();
+//        kcUser.setUsername(user.mail());
+//        kcUser.setCredentials(Collections.singletonList(credentialRepresentation));
+//        kcUser.setEmail(user.mail());
+//        kcUser.setEnabled(true);
+//        kcUser.setEmailVerified(false);
+//        log.info("kcUser {}", kcUser);
+//        usersResource.create(kcUser);
+//
+//    }
+//
+//    private static CredentialRepresentation createPasswordCredentials(String password) {
+//        CredentialRepresentation passwordCredentials = new CredentialRepresentation();
+//        passwordCredentials.setTemporary(false);
+//        passwordCredentials.setType(CredentialRepresentation.PASSWORD);
+//        passwordCredentials.setValue(password);
+//        return passwordCredentials;
+//    }
 }

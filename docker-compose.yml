@@ -119,8 +119,8 @@ services:
 #      KEYCLOAK_USER: admin
 #      KEYCLOAK_PASSWORD: admin
     environment:
-      - KEYCLOAK_USER=${POSTGRES_USER}
-      - KEYCLOAK_PASSWORD=${POSTGRES_PASSWORD}
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
       - DB_VENDOR=postgres
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}

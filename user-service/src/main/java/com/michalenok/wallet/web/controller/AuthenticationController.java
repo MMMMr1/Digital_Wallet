@@ -51,14 +51,14 @@ public class AuthenticationController {
         log.info("Authentication of user with mail: {} is successful", mail);
     }
   
-    @Operation(summary = "Authenticate client")
-    @ApiResponses({
-            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "500", description = "Server Error")
-    })
-    @PostMapping(path = "/login")
-    public void login(@RequestBody @Validated UserLoginDto user) {
-        service.login(user);
-        log.info("Authorization of {}", user.mail());
-    }
+//    @Operation(summary = "Authenticate client")
+//    @ApiResponses({
+//            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+//            @ApiResponse(responseCode = "500", description = "Server Error")
+//    })
+//    @PostMapping(path = "/login")
+//    public void login(@RequestBody @Validated UserLoginDto user) {
+//        service.login(user);
+//        log.info("Authorization of {}", user.mail());
+//    }
 }

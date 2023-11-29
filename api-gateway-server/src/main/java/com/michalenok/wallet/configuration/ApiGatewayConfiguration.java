@@ -47,7 +47,7 @@ public class ApiGatewayConfiguration {
                                 "/api/v1/users/{segment}",
                                 "/api/v1/users",
                                 "/user-service/v3/api-docs")
-                        .filters(f -> f.addRequestHeader("Is-Proxy-Request", "true")
+                        .filters(f ->  f.addRequestHeader("Is-Proxy-Request", "true")
                                 .circuitBreaker(c -> c.setName("userServiceCommonCircuitBreaker")
                                 .setFallbackUri("forward:/fallback/user-service-common-fallback")))
                         .uri("lb://user-service"))

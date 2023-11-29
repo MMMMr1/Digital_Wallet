@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -33,6 +35,7 @@ public class UserController {
             @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
+//    @RolesAllowed({"ADMIN"})
     @PostMapping
     protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
         log.info("create {}", user);
@@ -46,7 +49,7 @@ public class UserController {
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
-
+    @PreAuthorize("hasRole('admin')")
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
