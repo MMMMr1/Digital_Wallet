@@ -35,21 +35,20 @@ public class UserController {
             @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
-//    @RolesAllowed({"ADMIN"})
     @PostMapping
     protected ResponseEntity<?> create(@RequestBody @Validated UserCreateDto user) {
         log.info("create {}", user);
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasAuthority('permission:admin')")
     @Operation(summary = "Loading of all clients",
             security = @SecurityRequirement(name = "security_auth" ))
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
-    @PreAuthorize("hasRole('admin')")
     @GetMapping
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);

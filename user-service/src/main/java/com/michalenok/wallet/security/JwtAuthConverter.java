@@ -1,4 +1,5 @@
 package com.michalenok.wallet.security;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+@Log4j2
 @Component
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
@@ -47,7 +48,10 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         String claimName = JwtClaimNames.SUB;
         if (principleAttribute != null) {
             claimName = principleAttribute;
+            log.info("getPrincipleClaimName {}", claimName);
         }
+        Object claim = jwt.getClaim(claimName);
+        log.info("getPrincipleClaimName {}", claim);
         return jwt.getClaim(claimName);
     }
 
@@ -59,6 +63,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
             return Set.of();
         }
         resourceAccess = jwt.getClaim("resource_access");
+        log.info("extractResourceRoles {}", resourceAccess);
 
         if (resourceAccess.get(resourceId) == null) {
             return Set.of();
@@ -66,9 +71,12 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         resource = (Map<String, Object>) resourceAccess.get(resourceId);
 
         resourceRoles = (Collection<String>) resource.get("roles");
-        return resourceRoles
+        log.info("extractResourceRoles {}", resourceRoles);
+        Set<SimpleGrantedAuthority> collect = resourceRoles
                 .stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
+        log.info("collect {}", collect);
+        return collect;
     }
 }
