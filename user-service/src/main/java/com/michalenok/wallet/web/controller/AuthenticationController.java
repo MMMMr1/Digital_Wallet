@@ -1,13 +1,11 @@
 package com.michalenok.wallet.web.controller;
 
-import com.michalenok.wallet.model.dto.request.UserLoginDto;
 import com.michalenok.wallet.model.dto.request.UserRegistrationDto;
 import com.michalenok.wallet.service.api.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "authorization")
-//@SecurityRequirement(name = "security_auth")
 @Log4j2
 @RequiredArgsConstructor
 @RestController
@@ -50,15 +47,4 @@ public class AuthenticationController {
         service.verifyUser(code, mail);
         log.info("Authentication of user with mail: {} is successful", mail);
     }
-  
-//    @Operation(summary = "Authenticate client")
-//    @ApiResponses({
-//            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
-//            @ApiResponse(responseCode = "500", description = "Server Error")
-//    })
-//    @PostMapping(path = "/login")
-//    public void login(@RequestBody @Validated UserLoginDto user) {
-//        service.login(user);
-//        log.info("Authorization of {}", user.mail());
-//    }
 }

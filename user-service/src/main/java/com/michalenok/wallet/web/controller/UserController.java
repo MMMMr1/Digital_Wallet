@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -41,8 +39,7 @@ public class UserController {
         service.create(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    @PreAuthorize("hasRole('ADMIN')")
-//    @PreAuthorize("hasAuthority('permission:admin')")
+
     @Operation(summary = "Loading of all clients",
             security = @SecurityRequirement(name = "security_auth" ))
     @ApiResponses({
