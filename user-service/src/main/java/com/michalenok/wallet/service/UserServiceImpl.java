@@ -1,6 +1,7 @@
 package com.michalenok.wallet.service;
 
 import com.michalenok.wallet.feign.AccountServiceFeignClient;
+import com.michalenok.wallet.keycloak.KeycloakService;
 import com.michalenok.wallet.mapper.UserMapper;
 import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
@@ -15,12 +16,14 @@ import com.michalenok.wallet.service.util.TimeGenerationUtil;
 import com.michalenok.wallet.service.util.UuidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,7 +33,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AccountServiceFeignClient accountServiceFeignClient;
-
+    private final KeycloakService keycloakService;
     private final UserMapper userMapper;
     private final TimeGenerationUtil timeGenerationUtil;
     private final UuidUtil uuidUtil;
@@ -42,7 +45,8 @@ public class UserServiceImpl implements UserService {
         isUserExists(userDto);
         UserEntity user = userMapper.createDtoToUser(userDto);
         initializeNewUser(user);
-        createDefaultAccount(user);
+        keycloakService.addUser(userDto);
+//        createDefaultAccount(user);
         return userMapper.toUserInfo(userRepository.save(user));
     }
 
@@ -59,6 +63,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = getUserById(uuid);
         userMapper.updateUserEntity(user, userDto);
         userRepository.save(user);
+        keycloakService.updateUser(keycloakService.getUser(userDto.mail()).stream().findFirst().get().getId(), userDto);
         return userMapper.toUserInfo(user);
     }
 

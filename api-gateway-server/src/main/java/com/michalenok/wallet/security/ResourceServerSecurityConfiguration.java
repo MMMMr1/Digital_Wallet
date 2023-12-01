@@ -1,6 +1,5 @@
 package com.michalenok.wallet.security;
 
-import com.michalenok.wallet.security.GrantedAuthoritiesExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
