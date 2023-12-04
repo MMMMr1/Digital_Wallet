@@ -44,6 +44,7 @@ public class ResourceServerSecurityConfiguration {
             "/v3/api-docs/**",
             "/user-service/v3/api-docs/**"
     };
+
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @Bean
     SecurityWebFilterChain apiHttpSecurity(ServerHttpSecurity http) {
@@ -62,6 +63,7 @@ public class ResourceServerSecurityConfiguration {
                 .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
         return http.build();
     }
+
     Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
         JwtAuthenticationConverter jwtAuthenticationConverter =
                 new JwtAuthenticationConverter();
@@ -76,11 +78,13 @@ public class ResourceServerSecurityConfiguration {
         UserDetails userDetails = User.withUsername("admin").password("admin").roles("ADMIN").build();
         return new MapReactiveUserDetailsService(List.of(userDetails));
     }
+
     @Bean
     public ReactiveJwtDecoder jwtDecoder() {
         return NimbusReactiveJwtDecoder.withJwkSetUri(jwkSetUri)
                 .build();
     }
+
     @Bean
     public WebClient rest() {
         return WebClient.builder()
