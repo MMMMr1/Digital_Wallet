@@ -1,6 +1,7 @@
 package com.michalenok.wallet.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +16,19 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+import org.springframework.security.oauth2.server.resource.web.reactive.function.client.ServerBearerExchangeFilterFunction;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import java.util.List;
 
+@Log4j2
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 @Configuration
@@ -44,9 +49,10 @@ public class ResourceServerSecurityConfiguration {
     SecurityWebFilterChain apiHttpSecurity(ServerHttpSecurity http) {
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(authz -> authz
                         .pathMatchers(HttpMethod.GET, "api/v1/users").hasAuthority("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "api/v1/users").hasAuthority("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "api/v1/users/{uuid}").hasAuthority("ADMIN")
                         .pathMatchers(HttpMethod.POST, "api/v1/users/registration").permitAll()
                         .pathMatchers(HttpMethod.GET, "api/v1/users/verification").permitAll()
                         .pathMatchers(AUTH_WHITELIST).permitAll()
@@ -61,8 +67,10 @@ public class ResourceServerSecurityConfiguration {
                 new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter
                 (new GrantedAuthoritiesExtractor());
+        jwtAuthenticationConverter.setPrincipalClaimName(StandardClaimNames.PREFERRED_USERNAME);
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }
+
     @Bean
     MapReactiveUserDetailsService userDetailsService() {
         UserDetails userDetails = User.withUsername("admin").password("admin").roles("ADMIN").build();
@@ -71,6 +79,12 @@ public class ResourceServerSecurityConfiguration {
     @Bean
     public ReactiveJwtDecoder jwtDecoder() {
         return NimbusReactiveJwtDecoder.withJwkSetUri(jwkSetUri)
+                .build();
+    }
+    @Bean
+    public WebClient rest() {
+        return WebClient.builder()
+                .filter(new ServerBearerExchangeFilterFunction())
                 .build();
     }
 }

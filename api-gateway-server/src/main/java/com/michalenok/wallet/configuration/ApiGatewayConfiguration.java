@@ -4,6 +4,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
@@ -13,11 +14,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.time.Duration;
 
+@Log4j2
 @OpenAPIDefinition
 @Configuration
 @RequiredArgsConstructor
 public class ApiGatewayConfiguration {
-
     private final ApiGatewayServiceConfigData gatewayServiceConfigData;
 
     @Bean
@@ -47,10 +48,11 @@ public class ApiGatewayConfiguration {
                                 "/api/v1/users/{segment}",
                                 "/api/v1/users",
                                 "/user-service/v3/api-docs")
-                        .filters(f ->  f.addRequestHeader("Is-Proxy-Request", "true")
+                        .filters(f ->
+                                f.addRequestHeader("Is-Proxy-Request", "true")
                                 .circuitBreaker(c -> c.setName("userServiceCommonCircuitBreaker")
                                 .setFallbackUri("forward:/fallback/user-service-common-fallback")))
-                        .uri("lb://user-service"))
+                        .uri(gatewayServiceConfigData.getUserServiceUri()))
                 .route("account_service", r -> r.path(
                                 "/api/v1/accounts/{segment}",
                                 "/api/v1/accounts",

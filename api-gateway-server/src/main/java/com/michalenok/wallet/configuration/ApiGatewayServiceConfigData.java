@@ -18,4 +18,5 @@ public class ApiGatewayServiceConfigData {
     private Integer slidingWindowSize;
     private Integer minNumberOfCalls;
     private Long waitDurationInOpenState;
+    private String userServiceUri;
 }
