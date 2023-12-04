@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @Operation(summary = "Loading of all clients",
-            security = @SecurityRequirement(name = "security_auth" ))
+    security = @SecurityRequirement(name = "security_auth" ))
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")

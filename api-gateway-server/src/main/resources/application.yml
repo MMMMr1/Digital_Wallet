@@ -1,0 +1,85 @@
+server:
+  port: 8072
+  error:
+    include-message: always
+spring:
+  application:
+    name: api-gateway-server
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/auth/realms/wallet
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+      metrics:
+        enabled: true
+      actuator:
+        verbose:
+          enabled: true
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+api-gateway-service:
+  timeout-ms: 4000
+  failure-rate-threshold: 50
+  slow-call-rate-threshold: 50
+  slow-call-duration-threshold: 50
+  permitted-num-of-calls-in-half-open-state: 5
+  sliding-window-size: 10
+  min-number-of-calls: 10
+  wait-duration-in-open-state: 10000
+  user-service-uri: lb://user-service
+  account-service-uri: lb://account-service
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /user-service/v3/api-docs
+        name: User Service
+        primaryName: User Service
+
+    oauth:
+      client-id: wallet
+      client-secret: cRBo3LfzTpk6MB03D6vkIBZS85ziHGtq
+jwt:
+  auth:
+    converter:
+      resource-id: wallet
+      principle-attribute: preferred_username
+

@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface UserService {
     UserInfoDto create(UserCreateDto user);
 
-    UserInfoDto update(UUID uuid, UserCreateDto user);
+    UserInfoDto update(String mail, UserCreateDto user);
 
     Page<UserInfoDto> getPage(Pageable paging);
 
