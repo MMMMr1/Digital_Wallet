@@ -1,0 +1,59 @@
+{
+  "namespace": "com.michalenok.wallet.kafka.schema",
+  "type": "record",
+  "name": "Transaction",
+  "fields": [
+        {
+          "name": "uuid",
+          "type": [
+            "null",
+            "string"
+          ],
+          "logicalType": "UUID",
+          "default": null
+        },
+    {
+      "name": "accountTo",
+      "type": [
+        "null",
+        "string"
+      ],
+      "logicalType": "UUID",
+      "default": null
+    },
+    {
+      "name": "referenceNumber",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "amount",
+      "type": [
+        "null",
+        "string"
+      ],
+      "logicalType": "BigDecimal",
+      "default": null
+    },
+    {
+      "name": "currencyCode",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+         {
+           "name": "status",
+           "type": [
+             "null",
+             "string"
+           ],
+           "logicalType": "TransactionStatus",
+           "default": null
+         }
+  ]
+}

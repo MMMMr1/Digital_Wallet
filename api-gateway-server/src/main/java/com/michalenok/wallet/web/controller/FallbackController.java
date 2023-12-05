@@ -28,4 +28,12 @@ public class FallbackController {
                 .fallbackMessage("Currently account service is down. We are working to resolve the issue")
                 .build());
     }
+
+    @GetMapping("/money-transfer-service-common-fallback")
+    public ResponseEntity<FallbackDto> moneyTransferServiceCommonCircuitBreaker() {
+        log.info("User service is down");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(FallbackDto.builder()
+                .fallbackMessage("Currently money transfer service is down. We are working to resolve the issue")
+                .build());
+    }
 }
