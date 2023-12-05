@@ -9,11 +9,14 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Getter @Setter
+@Builder
 @Entity
 @Table(name = "transfers", schema = "app")
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransferEntity {
     @Id
-    private UUID uuid;
+    private UUID id;
     private UUID accountTo;
     private String referenceNumber;
     private BigDecimal amount;

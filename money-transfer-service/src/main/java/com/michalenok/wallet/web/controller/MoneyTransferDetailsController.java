@@ -21,21 +21,6 @@ import java.util.UUID;
 public class MoneyTransferDetailsController {
     private final TransferDetailsService transferDetailsService;
 
-    @Operation(summary = "Show all funds transfers", tags = "transfers details")
-    @GetMapping
-    protected Page<TransferInfoDto> showTransfers(Pageable pageable) {
-        log.info("Get all transfers of funds");
-        return transferDetailsService.getTransfers(pageable);
-    }
-
-    @Operation(summary = "Search funds transfers", tags = "transfers details")
-    @PostMapping()
-    public Page<TransferInfoDto> searchTransfers(@RequestBody @Valid TransferSpecificationDto specificationDto,
-                                                 Pageable pageable) {
-        log.info("Search transfers of funds {}", specificationDto);
-        return transferDetailsService.searchTransfers(specificationDto, pageable);
-    }
-
     @Operation(summary = "Show funds transfer details", tags = "transfers details")
     @GetMapping(path = "/{uuid}")
     protected TransferInfoDto showTransferDetails(@PathVariable("uuid") @NotBlank UUID uuid) {
@@ -48,6 +33,21 @@ public class MoneyTransferDetailsController {
     protected List<TransferInfoDto> showTransfersByAccount(@PathVariable("account_uuid") @NotBlank UUID accountUuid) {
         log.info("Show all funds transfers for account with uuid {}", accountUuid);
         return transferDetailsService.getTransfers(accountUuid);
+    }
+
+    @Operation(summary = "Show all funds transfers", tags = "transfers details")
+    @GetMapping
+    protected Page<TransferInfoDto> showTransfers(Pageable pageable) {
+        log.info("Get all transfers of funds");
+        return transferDetailsService.getTransfers(pageable);
+    }
+
+    @Operation(summary = "Search funds transfers", tags = "transfers details")
+    @PostMapping
+    public Page<TransferInfoDto> searchTransfers(@RequestBody @Valid TransferSpecificationDto specificationDto,
+                                                 Pageable pageable) {
+        log.info("Search transfers of funds {}", specificationDto);
+        return transferDetailsService.searchTransfers(specificationDto, pageable);
     }
 
     @Operation(summary = "Search funds transfers for account", tags = "transfers details")

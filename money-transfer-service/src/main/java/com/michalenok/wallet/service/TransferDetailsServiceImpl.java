@@ -4,10 +4,8 @@ import com.michalenok.wallet.mapper.TransferMapper;
 import com.michalenok.wallet.model.dto.exception.TransferNotFoundException;
 import com.michalenok.wallet.model.dto.request.TransferSpecificationDto;
 import com.michalenok.wallet.model.dto.response.TransferInfoDto;
-import com.michalenok.wallet.model.entity.TransferEntity;
 import com.michalenok.wallet.repository.TransferRepository;
 import com.michalenok.wallet.service.api.TransferDetailsService;
-import com.michalenok.wallet.service.util.TransferSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -16,12 +14,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
+import static com.michalenok.wallet.service.util.TransferSpecification.*;
 
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class TransferDetailsServiceImpl implements TransferDetailsService {
-
     private final TransferRepository transferRepository;
     private final TransferMapper transferMapper;
 
@@ -31,10 +29,13 @@ public class TransferDetailsServiceImpl implements TransferDetailsService {
         return transferRepository.findAll(pageable)
                 .map(transferMapper::transferEntityToTransferInfoDto);
     }
+
     public Page<TransferInfoDto> searchTransfers(TransferSpecificationDto specificationDto,
-                                                 Pageable pageable){
-        Specification<TransferEntity> search = TransferSpecification.search(specificationDto);
-        return transferRepository.findAll(search, pageable)
+                                                 Pageable pageable) {
+        return transferRepository.findAll(Specification
+                        .where(hasTransferType(specificationDto.transferType()))
+                        .and(hasAmountBetween(specificationDto.amountMin(), specificationDto.amountMax()))
+                        .and(hasTimeBetween(specificationDto.timeAfter(), specificationDto.timeBefore())), pageable)
                 .map(transferMapper::transferEntityToTransferInfoDto);
     }
 
@@ -56,8 +57,11 @@ public class TransferDetailsServiceImpl implements TransferDetailsService {
 
     @Override
     public Page<TransferInfoDto> searchTransfersByAccount(UUID accountUuid, TransferSpecificationDto specification, Pageable pageable) {
-        Specification<TransferEntity> search = TransferSpecification.search(specification, accountUuid);
-        return transferRepository.findAll(search, pageable)
+        return transferRepository.findAll(Specification
+                        .where(hasAccountUuid(accountUuid))
+                        .and(hasTransferType(specification.transferType()))
+                        .and(hasAmountBetween(specification.amountMin(), specification.amountMax()))
+                        .and(hasTimeBetween(specification.timeAfter(), specification.timeBefore())), pageable)
                 .map(transferMapper::transferEntityToTransferInfoDto);
     }
 }

@@ -32,7 +32,6 @@ import static com.michalenok.wallet.model.enums.TransferStatus.FAILED;
 @Service
 @RequiredArgsConstructor
 public class TransferServiceImpl implements TransferService {
-
     private final TransferRepository transferRepository;
     private final MessageProducer<Transfer> messageProducer;
     private final TransferMapper transferMapper;
@@ -49,7 +48,7 @@ public class TransferServiceImpl implements TransferService {
         messageProducer.sendMessage(transferMapper.toTransfer(transferEntity));
 
         CompletableFuture<Transaction> completableFuture = new CompletableFuture<>();
-        transfers.put(transferEntity.getUuid(), completableFuture);
+        transfers.put(transferEntity.getId(), completableFuture);
         return changeTransferStatus(completableFuture.get());
     }
 
@@ -62,7 +61,7 @@ public class TransferServiceImpl implements TransferService {
         messageProducer.sendMessage(transferMapper.toTransfer(transferEntity));
 
         CompletableFuture<Transaction> completableFuture = new CompletableFuture<>();
-        transfers.put(transferEntity.getUuid(), completableFuture);
+        transfers.put(transferEntity.getId(), completableFuture);
         return changeTransferStatus(completableFuture.get());
     }
 
@@ -75,7 +74,7 @@ public class TransferServiceImpl implements TransferService {
         messageProducer.sendMessage(transferMapper.toTransfer(transferEntity));
 
         CompletableFuture<Transaction> completableFuture = new CompletableFuture<>();
-        transfers.put(transferEntity.getUuid(), completableFuture);
+        transfers.put(transferEntity.getId(), completableFuture);
         return changeTransferStatus(completableFuture.get());
     }
 
@@ -91,25 +90,28 @@ public class TransferServiceImpl implements TransferService {
 
     private TransferEntity initializeOperationEntity(TransferRequestDto transferRequestDto, TransferType transferType) {
         Instant time = timeGenerationUtil.generateCurrentInstant();
-        TransferEntity transferEntity = transferMapper.transferRequestToTransferEntity(transferRequestDto);
-        transferEntity.setUuid(uuidUtil.generateUuid());
-        transferEntity.setType(transferType);
-        transferEntity.setCreatedAt(time);
-        transferEntity.setUpdatedAt(time);
-        transferEntity.setStatus(TransferStatus.CREATED);
-        return transferEntity;
+        return TransferEntity.builder()
+                .status(TransferStatus.CREATED)
+                .amount(transferRequestDto.amount())
+                .currencyCode(transferRequestDto.currencyCode())
+                .accountTo(transferRequestDto.accountTo())
+                .referenceNumber(transferRequestDto.referenceNumber())
+                .type(transferType)
+                .id(uuidUtil.generateUuid())
+                .createdAt(time)
+                .updatedAt(time).build();
     }
 
-    private TransferInfoDto changeTransferStatus(Transaction transaction){
+    private TransferInfoDto changeTransferStatus(Transaction transaction) {
         log.info("change transfer status {} ", transaction.toString());
         UUID uuid = UUID.fromString(transaction.getUuid());
         return transferRepository.findById(uuid)
                 .map(entity -> {
-                            entity.setStatus(
-                                    transaction.getStatus().equals(SUCCESSFUL.name()) ?
-                                            COMPLETED : FAILED);
-                            log.info("status {}", entity.getStatus());
-                            return  entity;})
+                    entity.setStatus(
+                            transaction.getStatus().equals(SUCCESSFUL.name()) ?
+                                    COMPLETED : FAILED);
+                    log.info("status {}", entity.getStatus());
+                    return entity;})
                 .map(transferMapper::transferEntityToTransferInfoDto)
                 .orElseThrow(() -> new TransferNotFoundException(String.format("transfer with uuid %s not found", uuid)));
     }

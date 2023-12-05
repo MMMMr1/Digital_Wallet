@@ -1,5 +1,6 @@
 package com.michalenok.wallet.kafka.listener;
 
+import com.michalenok.wallet.kafka.command.ExecutorTransferCommand;
 import com.michalenok.wallet.kafka.listener.api.TransferListener;
 import com.michalenok.wallet.kafka.producer.api.TransactionProducer;
 import com.michalenok.wallet.kafka.schema.Transaction;
@@ -37,15 +38,11 @@ public class TransferMessageListenerImpl implements TransferListener<Transfer> {
         try {
             TransferType transferType = TransferType.valueOf(message.getType());
             TransferRequestDto transferRequestDto = transferMapper.toTransfer(message);
-            log.info("TransferRequestDto {}", transferRequestDto);
 
-            if (TransferType.CREDIT.equals(transferType)) {
-                transferService.creditTransfer(transferRequestDto);
-            } else if (TransferType.DEBIT.equals(transferType)) {
-                transferService.debitTransfer(transferRequestDto);
-            } else if (TransferType.INTERNAL.equals(transferType)) {
-                transferService.internalFundTransfer(transferRequestDto);
-            }
+            ExecutorTransferCommand executorTransferCommand = new ExecutorTransferCommand();
+            executorTransferCommand.transfer(transferType)
+                    .transfer(transferService,transferRequestDto);
+            log.info("successful transfer of TransferRequestDto {}", transferRequestDto);
 
             transaction.setStatus(TransactionStatus.SUCCESSFUL.name());
             transactionProducer.sendMessage(transaction, topic);
