@@ -61,7 +61,7 @@ public class ApiGatewayConfiguration {
                         .filters(f -> f.addRequestHeader("Is-Proxy-Request", "true")
                                 .circuitBreaker(c -> c.setName("accountServiceCommonCircuitBreaker")
                                         .setFallbackUri("forward:/fallback/account-service-common-fallback")))
-                        .uri("lb://account-service"))
+                        .uri(gatewayServiceConfigData.getAccountServiceUri()))
                 .build();
     }
 }

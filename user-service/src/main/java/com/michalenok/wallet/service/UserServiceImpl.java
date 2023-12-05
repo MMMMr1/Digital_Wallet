@@ -3,7 +3,6 @@ package com.michalenok.wallet.service;
 import com.michalenok.wallet.feign.AccountServiceFeignClient;
 import com.michalenok.wallet.keycloak.KeycloakService;
 import com.michalenok.wallet.mapper.UserMapper;
-import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
@@ -16,13 +15,11 @@ import com.michalenok.wallet.service.util.TimeGenerationUtil;
 import com.michalenok.wallet.service.util.UuidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -57,12 +54,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserInfoDto update(String mail, UserCreateDto userDto) {
-        log.info("Update user by mail: {}. New data: {}", mail, userDto);
-        UserEntity user = getUserById(findByMail(mail).uuid());
+    public UserInfoDto update(UUID id, UserCreateDto userDto) {
+        log.info("Update user by mail: {}. New data: {}", id, userDto);
+        UserEntity user = getUserById(id);
         userMapper.updateUserEntity(user, userDto);
         userRepository.save(user);
-        keycloakService.updateUser(keycloakService.getUser(userDto.mail()).stream().findFirst().get().getId(), userDto);
         return userMapper.toUserInfo(user);
     }
 
@@ -123,8 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void createDefaultAccount(UserEntity user) {
-        if (Objects.equals(user.getStatus(), UserStatus.ACTIVATED) &&
-                user.getRole().contains(UserRole.USER)) {
+        if (Objects.equals(user.getStatus(), UserStatus.ACTIVATED)) {
             accountServiceFeignClient.createAccount(user.getUuid());
         }
         log.info("Create default account for user: {}", user.getMail());

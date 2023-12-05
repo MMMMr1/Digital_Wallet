@@ -15,7 +15,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @WireMockTest(httpPort = 8180)
-class ResourceServerSecurityConfigurationTest {
+class ResourceServerSecurityUserConfigurationTest {
     @Autowired
     WebTestClient webTestClient;
 
@@ -188,12 +188,12 @@ class ResourceServerSecurityConfigurationTest {
                 .expectStatus()
                 .isForbidden();
     }
-
     @TestConfiguration
     static class TestGatewayConfiguration {
         public TestGatewayConfiguration(ApiGatewayServiceConfigData properties) {
             String wireMockPort = "8180";
-            properties.setUserServiceUri("http://localhost:" + wireMockPort);
+            properties.setUserServiceUri("http://localhost:"+ wireMockPort);
+            properties.setAccountServiceUri("http://localhost:8089");
         }
     }
 }

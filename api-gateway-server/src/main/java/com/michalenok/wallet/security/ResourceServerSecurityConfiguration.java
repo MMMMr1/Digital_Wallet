@@ -56,6 +56,7 @@ public class ResourceServerSecurityConfiguration {
                         .pathMatchers(HttpMethod.GET, "api/v1/users/{uuid}").hasAuthority("ADMIN")
                         .pathMatchers(HttpMethod.POST, "api/v1/users/registration").permitAll()
                         .pathMatchers(HttpMethod.GET, "api/v1/users/verification").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/v1/accounts").hasAuthority("ADMIN")
                         .pathMatchers(AUTH_WHITELIST).permitAll()
                         .anyExchange().authenticated())
                 .oauth2ResourceServer()

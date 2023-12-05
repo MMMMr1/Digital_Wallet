@@ -19,4 +19,5 @@ public class ApiGatewayServiceConfigData {
     private Integer minNumberOfCalls;
     private Long waitDurationInOpenState;
     private String userServiceUri;
+    private String accountServiceUri;
 }

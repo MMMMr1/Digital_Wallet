@@ -10,10 +10,8 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
-
 import javax.ws.rs.core.Response;
 import java.util.*;
-
 import static com.michalenok.wallet.keycloak.KeycloakConfig.keycloak;
 import static org.keycloak.admin.client.CreatedResponseUtil.getCreatedId;
 
@@ -21,7 +19,7 @@ import static org.keycloak.admin.client.CreatedResponseUtil.getCreatedId;
 @Service
 @RequiredArgsConstructor
 public class KeycloakServiceImpl implements KeycloakService {
-    public void addUser(UserCreateDto userDTO) {
+    public String addUser(UserCreateDto userDTO) {
         CredentialRepresentation credential = Credentials
                 .createPasswordCredentials(userDTO.password());
         UserRepresentation user = new UserRepresentation();
@@ -33,6 +31,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         Response response = instance.create(user);
         String userId = getCreatedId(response);
         setRole(userId, userDTO.role());
+        return userId;
     }
 
     private void setRole(String userId, Set<String> roles) {
@@ -44,43 +43,6 @@ public class KeycloakServiceImpl implements KeycloakService {
                         roleRepresentations.add(realmResource.roles().get(role).toRepresentation()));
         UserResource userResource = usersResource.get(userId);
         userResource.roles().realmLevel().add(roleRepresentations);
-    }
-
-    public List<UserRepresentation> getUser(String userName) {
-        UsersResource usersResource = getInstance();
-        List<UserRepresentation> user = usersResource.search(userName, true);
-        return user;
-    }
-
-    public void updateUser(String userId, UserCreateDto userDTO) {
-        CredentialRepresentation credential = Credentials
-                .createPasswordCredentials(userDTO.password());
-        UserRepresentation user = new UserRepresentation();
-        user.setUsername(userDTO.mail());
-        user.setEmail(userDTO.mail());
-        user.setCredentials(Collections.singletonList(credential));
-
-        UsersResource usersResource = getInstance();
-        usersResource.get(userId).update(user);
-    }
-
-    public void deleteUser(String userId) {
-        UsersResource usersResource = getInstance();
-        usersResource.get(userId)
-                .remove();
-    }
-
-    public void sendVerificationLink(String userId) {
-        UsersResource usersResource = getInstance();
-        usersResource.get(userId)
-                .sendVerifyEmail();
-    }
-
-    public void sendResetPassword(String userId) {
-        UsersResource usersResource = getInstance();
-
-        usersResource.get(userId)
-                .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
     }
 
     public UsersResource getInstance() {
