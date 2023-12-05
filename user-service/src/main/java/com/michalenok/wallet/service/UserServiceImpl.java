@@ -55,8 +55,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserInfoDto update(UUID id, UserCreateDto userDto) {
-        log.info("Update user by mail: {}. New data: {}", id, userDto);
+        log.info("Update user by id: {}. New data: {}", id, userDto);
         UserEntity user = getUserById(id);
+        userMapper.updateUserEntity(user, userDto);
+        userRepository.save(user);
+        return userMapper.toUserInfo(user);
+    }
+
+    @Override
+    public UserInfoDto update(String mail, UserCreateDto userDto) {
+        log.info("Update user by mail: {}. New data: {}", mail, userDto);
+        UserEntity user = userRepository.findByMail(mail).get();
         userMapper.updateUserEntity(user, userDto);
         userRepository.save(user);
         return userMapper.toUserInfo(user);

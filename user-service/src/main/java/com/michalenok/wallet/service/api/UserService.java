@@ -12,6 +12,8 @@ public interface UserService {
 
     UserInfoDto update(UUID id, UserCreateDto user);
 
+    UserInfoDto update(String mail, UserCreateDto user);
+
     Page<UserInfoDto> getPage(Pageable paging);
 
     UserInfoDto findById(UUID uuid);

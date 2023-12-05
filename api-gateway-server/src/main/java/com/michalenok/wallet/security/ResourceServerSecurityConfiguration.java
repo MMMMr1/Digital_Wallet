@@ -5,13 +5,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
@@ -45,7 +44,6 @@ public class ResourceServerSecurityConfiguration {
             "/user-service/v3/api-docs/**"
     };
 
-    @Order(Ordered.HIGHEST_PRECEDENCE)
     @Bean
     SecurityWebFilterChain apiHttpSecurity(ServerHttpSecurity http) {
         http
@@ -59,6 +57,7 @@ public class ResourceServerSecurityConfiguration {
                         .pathMatchers(HttpMethod.GET, "/api/v1/accounts").hasAuthority("ADMIN")
                         .pathMatchers(AUTH_WHITELIST).permitAll()
                         .anyExchange().authenticated())
+                .addFilterAfter(new AddResponseHeaderWebFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
                 .oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
