@@ -11,8 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Log4j2
-class GrantedAuthoritiesExtractor
-        implements Converter<Jwt, Collection<GrantedAuthority>> {
+class GrantedAuthoritiesExtractor implements Converter<Jwt, Collection<GrantedAuthority>> {
     private static String RESOURCE_ACCESS = "realm_access";
     private static String ROLES = "roles";
 

@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
@@ -57,7 +56,6 @@ public class ResourceServerSecurityConfiguration {
                         .pathMatchers(HttpMethod.GET, "/api/v1/accounts").hasAuthority("ADMIN")
                         .pathMatchers(AUTH_WHITELIST).permitAll()
                         .anyExchange().authenticated())
-                .addFilterAfter(new AddResponseHeaderWebFilter(), SecurityWebFiltersOrder.AUTHORIZATION)
                 .oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
