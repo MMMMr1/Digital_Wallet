@@ -28,6 +28,7 @@ public interface UserMapper {
 
     @Mapping(target = "uuid", ignore = true)
     @Mapping(target = "role", expression = "java(rolesToUserRole(user.role()))")
+    @Mapping(target = "mail", expression = "java(mailToLowerCase(user.mail()))")
     @Mapping(target = "status", expression = "java(statusToUserStatus(user.status()))")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
@@ -41,5 +42,8 @@ public interface UserMapper {
         return role.stream()
                 .map(UserRole::valueOf)
                 .collect(Collectors.toSet());
+    }
+    default String mailToLowerCase(String mail) {
+        return mail.toLowerCase();
     }
 }

@@ -63,15 +63,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDto update(String mail, UserCreateDto userDto) {
-        log.info("Update user by mail: {}. New data: {}", mail, userDto);
-        UserEntity user = userRepository.findByMail(mail).get();
-        userMapper.updateUserEntity(user, userDto);
-        userRepository.save(user);
-        return userMapper.toUserInfo(user);
-    }
-
-    @Override
     public Page<UserInfoDto> getPage(Pageable paging) {
         log.info("Get page with user info.");
         return userRepository.findAll(paging)
@@ -95,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoDto findByMail(String mail) {
-        return userRepository.findByMail(mail)
+        return userRepository.findByMail(mail.toLowerCase())
                 .map(userMapper::toUserInfo)
                 .orElseThrow(() ->
                         new UserNotFoundException(String.format("User with mail {%s} not found", mail)));
