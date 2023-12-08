@@ -29,7 +29,7 @@ public class ClientPersonalCabinetController {
     })
     @GetMapping
     public UserInfoDto getDetails(@AuthenticationPrincipal Jwt jwt) {
-        return service.findByMail((String) jwt.getClaim(PREFERRED_USERNAME));
+        return service.findByMail(jwt.getClaim(PREFERRED_USERNAME));
     }
 }
 

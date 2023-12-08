@@ -20,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
+
     @Operation(summary = "Creating of new account", tags = "accounts")
     @PostMapping
     protected ResponseEntity<?> create(@RequestParam(name = "client_uuid") UUID uuid) {
@@ -51,11 +52,12 @@ public class AccountController {
         log.info("get all accounts for client [{}]", uuid);
         return accountService.findAllByClientId(uuid);
     }
+
     @Operation(summary = "Closing of account by uuid", tags = "accounts")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/closing")
     public void closeAccount(@RequestParam("account_uuid") UUID uuid) {
         log.info("close account {}", uuid);
-         accountService.close(uuid);
+        accountService.close(uuid);
     }
 }

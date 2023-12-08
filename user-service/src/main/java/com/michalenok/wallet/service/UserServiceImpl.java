@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoDto findByMail(String mail) {
-        return userRepository.findByMail(mail.toLowerCase())
+        return userRepository.findByMail(mail)
                 .map(userMapper::toUserInfo)
                 .orElseThrow(() ->
                         new UserNotFoundException(String.format("User with mail {%s} not found", mail)));
