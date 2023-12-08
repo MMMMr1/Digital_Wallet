@@ -88,11 +88,11 @@ class JWTSecurityConfigurationTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void givenRequestAuthorizedAsUser_whenGet_thenForbidden() throws Exception {
+    public void givenRequestAuthorizedAsUser_whenGet_thenOk() throws Exception {
         mockMvc.perform(get("/api/v1/accounts/details")
                         .header("Is-Proxy-Request", true)
                         .param("account_uuid", uuid))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk());
     }
 
     @Test

@@ -38,7 +38,6 @@ public class AccountController {
     }
 
     @Operation(summary = "Loading of account details", tags = "accounts")
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/details")
     public AccountInfoDto get(@RequestParam("account_uuid") UUID uuid) {
         log.info("get details for account [{}]", uuid);

@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 @Tag(name = "personal cabinet")
 @Log4j2
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ClientPersonalCabinetController {
     private final UserService service;
-    private static String PREFERRED_USERNAME = "preferred_username";
 
     @Operation(summary = "Show personal client data")
     @ApiResponses({
@@ -29,7 +29,7 @@ public class ClientPersonalCabinetController {
     })
     @GetMapping
     public UserInfoDto getDetails(@AuthenticationPrincipal Jwt jwt) {
-        return service.findByMail(jwt.getClaim(PREFERRED_USERNAME));
+        return service.findById(UUID.fromString(jwt.getSubject()));
     }
 }
 

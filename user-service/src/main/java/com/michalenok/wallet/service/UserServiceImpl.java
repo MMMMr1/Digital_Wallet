@@ -12,7 +12,6 @@ import com.michalenok.wallet.model.exception.UserNotFoundException;
 import com.michalenok.wallet.repository.api.UserRepository;
 import com.michalenok.wallet.service.api.UserService;
 import com.michalenok.wallet.service.util.TimeGenerationUtil;
-import com.michalenok.wallet.service.util.UuidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -32,7 +31,6 @@ public class UserServiceImpl implements UserService {
     private final KeycloakService keycloakService;
     private final UserMapper userMapper;
     private final TimeGenerationUtil timeGenerationUtil;
-    private final UuidUtil uuidUtil;
 
     @Override
     @Transactional
@@ -40,9 +38,8 @@ public class UserServiceImpl implements UserService {
         log.info("Create user: {}", userDto);
         isUserExists(userDto);
         UserEntity user = userMapper.createDtoToUser(userDto);
-        initializeNewUser(user);
-        keycloakService.addUser(userDto);
-        createDefaultAccount(user);
+        String id = keycloakService.addUser(userDto);
+        initializeNewUser(user, id);
         return userMapper.toUserInfo(userRepository.save(user));
     }
 
@@ -109,9 +106,9 @@ public class UserServiceImpl implements UserService {
                         new UserNotFoundException(String.format("User with uuid {%s} not found", uuid)));
     }
 
-    private void initializeNewUser(UserEntity user) {
+    private void initializeNewUser(UserEntity user, String id) {
         Instant instant = timeGenerationUtil.generateCurrentInstant();
-        user.setUuid(uuidUtil.generateUuid());
+        user.setUuid(UUID.fromString(id));
         user.setCreatedAt(instant);
         user.setUpdatedAt(instant);
         log.info("initialize user with mail {}: uuid {}, createdAt {}, updatedAt {}",
