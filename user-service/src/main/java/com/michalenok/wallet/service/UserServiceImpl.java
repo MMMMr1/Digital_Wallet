@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
         isUserExists(userDto);
         UserEntity user = userMapper.createDtoToUser(userDto);
         initializeNewUser(user);
-        createDefaultAccount(user);
         return userMapper.toUserInfo(userRepository.save(user));
     }
 
