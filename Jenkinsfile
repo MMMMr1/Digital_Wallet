@@ -9,15 +9,11 @@ pipeline {
                  sh 'gradle clean'
             }
         }
-    }
-    stages {
         stage('Test') {
             steps {
                  sh 'gradle :user-service:test'
             }
         }
-    }
-    stages {
         stage('Build') {
             steps {
                  sh 'gradle build'
