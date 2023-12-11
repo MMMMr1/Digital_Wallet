@@ -24,7 +24,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 public abstract class IntegrationTestBase {
     @Container
     @ServiceConnection
-    static PostgreSQLContainer postgres = new PostgreSQLContainer(DockerImageName.parse("postgres:15.1"))
+    static PostgreSQLContainer postgres = new PostgreSQLContainer(DockerImageName.parse("postgres"))
             .withDatabaseName("postgres")
             .withUsername("postgres")
             .withPassword("root");

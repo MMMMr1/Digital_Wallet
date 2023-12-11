@@ -1,4 +1,5 @@
 spring:
+  profiles: test
   application:
     name: account-service
 #
