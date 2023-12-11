@@ -16,7 +16,4 @@ pipeline {
             }
         }
     }
-   tools {
-     jdk 'JDK_17_new'
-   }
 }
