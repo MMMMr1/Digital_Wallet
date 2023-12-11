@@ -64,13 +64,13 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-//tasks.withType(Test) {
-//    finalizedBy jacocoTestReport
-//}
-//
-//project.jacocoTestReport {
-//    getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
-//    reports {
-//        csv.enabled true
-//    }
-//}
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+    dependsOn test
+}

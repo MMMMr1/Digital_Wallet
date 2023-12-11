@@ -20,7 +20,6 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 @SqlGroup({
         @Sql(scripts = "classpath:sql/data.sql", executionPhase = BEFORE_TEST_METHOD),
         @Sql(scripts = "classpath:sql/clear_data.sql", executionPhase = AFTER_TEST_METHOD)})
-
 public abstract class IntegrationTestBase {
     @Container
     @ServiceConnection

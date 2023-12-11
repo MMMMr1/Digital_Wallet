@@ -12,18 +12,11 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'chmod +x ./gradlew'
-                sh './gradlew clean build'
+                 sh './gradlew clean build'
             }
         }
     }
-
-    post {
-        success {
-            echo 'Build successful! Deploying...'
-        }
-        failure {
-            echo 'Build failed! Notify someone...'
-        }
-    }
+   tools {
+     jdk 'JDK_17_new'
+   }
 }
