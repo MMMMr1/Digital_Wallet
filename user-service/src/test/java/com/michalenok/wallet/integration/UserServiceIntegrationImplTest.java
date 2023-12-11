@@ -8,19 +8,12 @@ import com.michalenok.wallet.service.api.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import java.util.Set;
 import java.util.UUID;
 import static com.michalenok.wallet.model.constant.UserStatus.DEACTIVATED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
-@SqlGroup({
-        @Sql(scripts = "classpath:sql/data.sql", executionPhase = BEFORE_TEST_METHOD),
-        @Sql(scripts = "classpath:sql/clear_data.sql", executionPhase = AFTER_TEST_METHOD)})
 class UserServiceIntegrationImplTest extends IntegrationTestBase {
     @Autowired
     private UserService userService;

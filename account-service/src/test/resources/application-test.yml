@@ -1,0 +1,83 @@
+spring:
+  application:
+    name: account-service
+#
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://database-user-service:5432/postgres
+#    username: postgres
+#    password: root
+#
+#  liquibase:
+#    enabled: true
+#
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: none
+#
+##   kafka:
+##     bootstrap-servers: broker:29092
+##     producer:
+##       keySerializer: "org.apache.kafka.common.serialization.StringSerializer"
+##       valueSerializer: "io.confluent.kafka.serializers.KafkaAvroSerializer"
+##       properties:
+##         schema:
+##           registry:
+##             url: http://schema-registry:8081
+## avro:
+##   topic:
+##     name:
+##       verification: verification_topic
+#
+eureka:
+  instance:
+    prefer-ip-address: false
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka
+openapi:
+  service:
+    version: 1.0.0
+    name: ${spring.application.name}
+    description: "Responsible for managing users" #api gateway url
+    url: http://localhost:8072
+springdoc:
+  api-docs:
+    path: /user-service/v3/api-docs #these urls will used to load the swagger ui of this service by the api gateway
+  swagger-ui:
+    path: /user-service/swagger-ui.html
+#
+#---
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+##spring:
+##  application:
+##    name: user-service
+##  datasource:
+##    driver-class-name: org.postgresql.Driver
+##    url: ${SPRING_DATASOURCE_URL_USER}
+##    username: ${POSTGRES_USER}
+##    password: ${POSTGRES_PASSWORD}
+##
+##  liquibase:
+##    enabled: true
+##
+##  jpa:
+##    show-sql: true
+##    hibernate:
+##      ddl-auto: none
+##eureka:
+##  instance:
+##    prefer-ip-address: true
+##  client:
+##    register-with-eureka: true
+##    fetch-registry: true
+##    service-url:
+##      defaultZone: http://discovery-server:8761/eureka

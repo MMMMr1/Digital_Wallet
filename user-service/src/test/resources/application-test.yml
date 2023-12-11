@@ -6,7 +6,8 @@ spring:
       enabled: false
   application:
     name: user-server
-
+  datasource:
+    url: jdbc:tc:postgresql:15-alpine:///
   liquibase:
     enabled: true
   security:
