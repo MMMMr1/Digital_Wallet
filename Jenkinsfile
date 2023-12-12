@@ -16,7 +16,7 @@ pipeline {
             }
             stage('Build Docker Image') {
                 steps {
-                    sh 'gradle docker'
+                    docker.build("user_service:1.0.0", "./user_service")
                 }
             }
             stage('Run Docker Image') {
