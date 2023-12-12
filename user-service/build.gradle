@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
     id 'org.springdoc.openapi-gradle-plugin' version "$gradlePluginOpenapiVersion"
-    id 'jacoco'
 }
 
 group = 'com.michalenok'
@@ -49,8 +48,8 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:$mapStructVersion"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:postgresql'
+    testImplementation "org.testcontainers:junit-jupiter:$testcontainers"
+    testImplementation "org.testcontainers:postgresql:$testcontainers"
     testImplementation "org.wiremock:wiremock:$wiremockVersion"
 }
 
@@ -62,15 +61,4 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-test {
-    finalizedBy jacocoTestReport
-}
-
-jacocoTestReport {
-    reports {
-        xml.required = true
-    }
-    dependsOn test
 }
