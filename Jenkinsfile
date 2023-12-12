@@ -14,9 +14,12 @@ pipeline {
                     sh 'gradle test'
                 }
             }
-            stage('Build Docker Image') {
-                steps {
-                    docker.build("user_service:1.0.0", "./user_service")
+            stage('Build docker image'){
+                steps{
+                    script{
+                        sh 'docker build -t user-service .'
+                        sh 'docker build -t account-service .'
+                    }
                 }
             }
             stage('Run Docker Image') {
