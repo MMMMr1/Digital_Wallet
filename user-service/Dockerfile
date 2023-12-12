@@ -1,7 +1,7 @@
 FROM gradle:jdk17 as gradleimage
 COPY . /home/gradle/source
 WORKDIR /home/gradle/source
-RUN gradle build -x test
+RUN gradle build
 
 FROM openjdk:17
 WORKDIR /app
