@@ -24,7 +24,7 @@ pipeline {
             }
             stage('Run Docker Image') {
                 steps {
-                    sh 'gradle dockerRun'
+                    sh 'docker run'
                 }
             }
         }
