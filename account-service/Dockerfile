@@ -1,7 +1,9 @@
 FROM gradle:jdk17 as gradleimage
 COPY . /home/gradle/source
 WORKDIR /home/gradle/source
-RUN gradle build
+ENV DOCKER_HOST=tcp://host.docker.internal:2375
+ENV TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
+RUN gradle
 
 FROM openjdk:17
 WORKDIR /app
