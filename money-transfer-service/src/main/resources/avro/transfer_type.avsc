@@ -1,0 +1,6 @@
+{
+  "namespace": "com.michalenok.wallet.kafka.schema",
+  "type": "enum",
+  "name": "TransferType",
+  "symbols" : ["CREDIT", "DEBIT", "INTERNAL"]
+}
