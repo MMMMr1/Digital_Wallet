@@ -17,10 +17,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
-
 import static java.util.UUID.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         AuthenticationController.class,
         ClientPersonalCabinetController.class
 })
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JWTSecurityConfigurationTest {
@@ -92,7 +93,6 @@ class JWTSecurityConfigurationTest {
                         .header("Is-Proxy-Request", true))
                 .andExpect(status().isOk());
     }
-
 
     @Test
     @WithMockUser(roles = {"USER", "ADMIN"})

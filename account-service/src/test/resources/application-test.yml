@@ -5,9 +5,7 @@ spring:
     config:
       enabled: false
   application:
-    name: user-server
-#  datasource:
-#    url: jdbc:tc:postgresql:15-alpine:///
+    name: account-server
 
   liquibase:
     enabled: true
@@ -15,7 +13,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/auth/realms/wallet
+          issuer-uri: http://localhost:8080/auth/realms/wallet
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 eureka:
@@ -26,7 +24,3 @@ eureka:
     fetch-registry: false
     service-url:
       defaultZone: http://discovery-server:8761/eureka
-feign:
-  client:
-    account-service:
-      name: account-service

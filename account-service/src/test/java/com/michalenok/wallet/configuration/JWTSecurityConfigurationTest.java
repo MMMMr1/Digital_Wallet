@@ -1,6 +1,5 @@
 package com.michalenok.wallet.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.michalenok.wallet.service.api.AccountService;
 import com.michalenok.wallet.web.controller.AccountController;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
 
 import static java.util.UUID.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = {SecurityConfiguration.class,
         AccountController.class
 })
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class JWTSecurityConfigurationTest {

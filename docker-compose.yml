@@ -165,11 +165,6 @@ services:
     networks:
       - digital_wallet_ntwrk
 
-volumes:
-  keycloak_db_vlm:
-    name: keycloak_db_vlm
-
- 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.4.0
     hostname: zookeeper
@@ -251,7 +246,11 @@ volumes:
       PORT: 9021
     networks:
       - digital_wallet_ntwrk
- 
+
+volumes:
+  keycloak_db_vlm:
+    name: keycloak_db_vlm
+
 networks:
   digital_wallet_ntwrk:
     name: digital_wallet_ntwrk

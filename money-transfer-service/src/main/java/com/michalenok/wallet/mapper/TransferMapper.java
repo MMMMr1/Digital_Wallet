@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TransferMapper {
     @Mapping(target = "accountTo", expression = "java(operation.getAccountTo().toString())")
-    @Mapping(target = "uuid", expression = "java(operation.getUuid().toString())")
+    @Mapping(target = "uuid", expression = "java(operation.getId().toString())")
     Transfer toTransfer (TransferEntity operation);
     TransferEntity transferRequestToTransferEntity (TransferRequestDto transferRequestDto);
     TransferInfoDto transferEntityToTransferInfoDto (TransferEntity operation);
