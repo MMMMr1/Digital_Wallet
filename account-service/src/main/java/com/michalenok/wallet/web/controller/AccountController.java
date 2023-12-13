@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,7 @@ public class AccountController {
     }
 
     @Operation(summary = "Loading of accounts", tags = "accounts")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     protected Page<AccountInfoDto> getAll(Pageable pageable) {
         log.info("get all accounts");
@@ -43,6 +45,7 @@ public class AccountController {
     }
 
     @Operation(summary = "Loading of all client accounts by client uuid", tags = "accounts")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/{uuid}")
     public List<AccountInfoDto> getAllAccountsByClientId(@PathVariable("uuid") UUID uuid) {
         log.info("get all accounts for client [{}]", uuid);
@@ -50,9 +53,10 @@ public class AccountController {
     }
 
     @Operation(summary = "Closing of account by uuid", tags = "accounts")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/closing")
     public void closeAccount(@RequestParam("account_uuid") UUID uuid) {
         log.info("close account {}", uuid);
-         accountService.close(uuid);
+        accountService.close(uuid);
     }
 }

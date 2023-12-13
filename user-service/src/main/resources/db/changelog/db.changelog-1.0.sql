@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS app.users
     uuid uuid PRIMARY KEY,
     mail VARCHAR(64) NOT NULL UNIQUE,
     mobile_phone VARCHAR(64) NOT NULL UNIQUE,
-    password VARCHAR(100) NOT NULL,
     status SMALLINT NOT NULL,
     created_at TIMESTAMP,
     updated_at TIMESTAMP

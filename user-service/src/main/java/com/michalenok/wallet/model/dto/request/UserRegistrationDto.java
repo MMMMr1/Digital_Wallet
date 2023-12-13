@@ -6,7 +6,9 @@ import com.michalenok.wallet.validator.ValidatedMail;
 import com.michalenok.wallet.validator.ValidatedPassword;
 import com.michalenok.wallet.validator.ValidatedPhoneNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
+@Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record UserRegistrationDto (
                                    @Schema(defaultValue = "VladMichs@gmail.com", description = "Email address")

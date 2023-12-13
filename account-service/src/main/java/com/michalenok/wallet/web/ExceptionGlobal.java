@@ -3,11 +3,9 @@ package com.michalenok.wallet.web;
 import com.michalenok.wallet.model.error.ExceptionErrorDTO;
 import com.michalenok.wallet.model.error.ExceptionListDTO;
 import com.michalenok.wallet.model.error.ExceptionStructuredDTO;
-import com.michalenok.wallet.model.exception.AccountNotFoundException;
-import com.michalenok.wallet.model.exception.CurrencyCodeMismatchException;
-import com.michalenok.wallet.model.exception.ExceedingBalanceLimitException;
-import com.michalenok.wallet.model.exception.InsufficientFundsException;
+import com.michalenok.wallet.model.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -45,6 +43,12 @@ public class ExceptionGlobal {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionErrorDTO ArgumentAccountNotFoundException(
             RuntimeException e) {
+        return new ExceptionErrorDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public  ExceptionErrorDTO handleAccessDeniedException(AccessDeniedException e) {
         return new ExceptionErrorDTO(e.getMessage());
     }
 

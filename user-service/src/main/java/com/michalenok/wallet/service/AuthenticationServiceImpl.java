@@ -1,13 +1,12 @@
 package com.michalenok.wallet.service;
 
 import com.michalenok.wallet.feign.AccountServiceFeignClient;
+import com.michalenok.wallet.keycloak.KeycloakService;
 import com.michalenok.wallet.mapper.UserMapper;
 import com.michalenok.wallet.model.constant.UserStatus;
-import com.michalenok.wallet.model.dto.request.UserLoginDto;
 import com.michalenok.wallet.model.dto.request.UserRegistrationDto;
 import com.michalenok.wallet.model.entity.UserEntity;
 import com.michalenok.wallet.model.entity.VerificationEntity;
-import com.michalenok.wallet.model.exception.ValidationUserException;
 import com.michalenok.wallet.model.exception.VerificationUserException;
 import com.michalenok.wallet.repository.api.VerificationRepository;
 import com.michalenok.wallet.service.api.AuthenticationService;
@@ -47,14 +46,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("Successful verification user [{}, {}]", userUuid, mail);
     }
 
-    @Override
-    public void login(UserLoginDto userLoginDto) {
-        UserEntity user = getUser(userLoginDto.mail());
-        isStatusActivated(user);
-        isPasswordValid(user.getPassword(), userLoginDto.password());
-        log.info("Successful authentication user with mail {}", userLoginDto.mail());
-    }
-
     private UserEntity getUser(String mail) {
         log.info("get user with mail {}", mail);
         return userMapper.toUserEntity(userService.findByMail(mail));
@@ -67,20 +58,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!code.equals(verificationCode.getCode())) {
             log.error("Unsuccessful verification: {} , {}", mail, code);
             throw new VerificationUserException("Incorrect mail and code");
-        }
-    }
-
-    private void isStatusActivated(UserEntity user) {
-        if (user.getStatus() != UserStatus.ACTIVATED) {
-            log.error("Unsuccessful login with {}. User is not activated", user.getMail());
-            throw new ValidationUserException(String.format("User with mail {%s} is not ACTIVATED", user.getMail()));
-        }
-    }
-
-    private void isPasswordValid(String password, String passwordDto) {
-        if (!password.equals(passwordDto)) {
-            log.error("Incorrect password");
-            throw new ValidationUserException("Incorrect password");
         }
     }
 

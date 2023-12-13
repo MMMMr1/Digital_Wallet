@@ -1,8 +1,8 @@
 package com.michalenok.wallet.service;
 
 import com.michalenok.wallet.feign.AccountServiceFeignClient;
+import com.michalenok.wallet.keycloak.KeycloakService;
 import com.michalenok.wallet.mapper.UserMapper;
-import com.michalenok.wallet.model.constant.UserRole;
 import com.michalenok.wallet.model.constant.UserStatus;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
@@ -12,7 +12,6 @@ import com.michalenok.wallet.model.exception.UserNotFoundException;
 import com.michalenok.wallet.repository.api.UserRepository;
 import com.michalenok.wallet.service.api.UserService;
 import com.michalenok.wallet.service.util.TimeGenerationUtil;
-import com.michalenok.wallet.service.util.UuidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -29,9 +28,9 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AccountServiceFeignClient accountServiceFeignClient;
+    private final KeycloakService keycloakService;
     private final UserMapper userMapper;
     private final TimeGenerationUtil timeGenerationUtil;
-    private final UuidUtil uuidUtil;
 
     @Override
     @Transactional
@@ -39,8 +38,8 @@ public class UserServiceImpl implements UserService {
         log.info("Create user: {}", userDto);
         isUserExists(userDto);
         UserEntity user = userMapper.createDtoToUser(userDto);
-        initializeNewUser(user);
-        createDefaultAccount(user);
+        String id = keycloakService.addUser(userDto);
+        initializeNewUser(user, id);
         return userMapper.toUserInfo(userRepository.save(user));
     }
 
@@ -52,9 +51,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserInfoDto update(UUID uuid, UserCreateDto userDto) {
-        log.info("Update user by uuid: {}. New data: {}", uuid, userDto);
-        UserEntity user = getUserById(uuid);
+    public UserInfoDto update(UUID id, UserCreateDto userDto) {
+        log.info("Update user by id: {}. New data: {}", id, userDto);
+        UserEntity user = getUserById(id);
         userMapper.updateUserEntity(user, userDto);
         userRepository.save(user);
         return userMapper.toUserInfo(user);
@@ -107,18 +106,17 @@ public class UserServiceImpl implements UserService {
                         new UserNotFoundException(String.format("User with uuid {%s} not found", uuid)));
     }
 
-    private void initializeNewUser(UserEntity user) {
+    private void initializeNewUser(UserEntity user, String id) {
         Instant instant = timeGenerationUtil.generateCurrentInstant();
-        user.setUuid(uuidUtil.generateUuid());
+        user.setUuid(UUID.fromString(id));
         user.setCreatedAt(instant);
         user.setUpdatedAt(instant);
         log.info("initialize user with mail {}: uuid {}, createdAt {}, updatedAt {}",
                 user.getMail(), user.getUuid(), user.getCreatedAt(), user.getUpdatedAt());
     }
 
-    private void createDefaultAccount(UserEntity user){
-        if (Objects.equals(user.getStatus(),UserStatus.ACTIVATED) &&
-                user.getRole().contains(UserRole.USER)){
+    private void createDefaultAccount(UserEntity user) {
+        if (Objects.equals(user.getStatus(), UserStatus.ACTIVATED)) {
             accountServiceFeignClient.createAccount(user.getUuid());
         }
         log.info("Create default account for user: {}", user.getMail());

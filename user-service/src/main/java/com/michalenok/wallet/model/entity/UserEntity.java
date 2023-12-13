@@ -31,8 +31,6 @@ public class UserEntity {
     private String mail;
     @NotNull
     private String mobilePhone;
-    @NotNull
-    private String password;
     @Enumerated(EnumType.ORDINAL)
     @ElementCollection
     @CollectionTable(

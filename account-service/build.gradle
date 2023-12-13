@@ -41,16 +41,20 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonDatatypeVersion"
 	implementation "io.swagger.core.v3:swagger-annotations:$swaggerAnnotationsVersion"
-	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion" 
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' 
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation "org.apache.avro:avro:$avroVersion"
 	implementation "io.confluent:kafka-avro-serializer:$kafkaAvroSerializerVersion"
-	implementation "io.confluent:kafka-schema-registry-client:$kafkaSchemaRegistryClientVersion"
+	implementation "io.confluent:kafka-schema-registry-client:$kafkaSchemaRegistryClientVersion" 
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 	annotationProcessor "org.mapstruct:mapstruct-processor:$mapStructVersion"
 }
 
