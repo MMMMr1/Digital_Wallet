@@ -20,6 +20,7 @@ import static com.michalenok.wallet.model.constant.UserStatus.DEACTIVATED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @Profile("test")
 class UserServiceIntegrationImplTest extends IntegrationTestBase {
@@ -30,7 +31,7 @@ class UserServiceIntegrationImplTest extends IntegrationTestBase {
 
     @Test
     void create_Successful() {
-        Mockito.when(keycloakService.addUser(any(UserCreateDto.class)))
+        when(keycloakService.addUser(any(UserCreateDto.class)))
                 .thenReturn(UUID.randomUUID().toString());
         UserInfoDto userInfoDto = userService.create(getUserCreateDto("dmitryd@dmitry.com", "2345678"));
         assertEquals("dmitryd@dmitry.com", userInfoDto.mail());

@@ -1,9 +1,10 @@
 FROM gradle:jdk17 as gradleimage
 COPY . /home/gradle/source
 WORKDIR /home/gradle/source
+
 ENV DOCKER_HOST=tcp://host.docker.internal:2375
-ENV TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
-RUN gradle
+RUN gradle build
+#docker run -p 2375:2375 -v /var/run/docker.sock:/var/run/docker.sock alpine/socat tcp-listen:2375,reuseaddr,fork unix-connect:/var/run/docker.sock
 
 FROM openjdk:17
 WORKDIR /app

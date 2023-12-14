@@ -8,15 +8,13 @@ import com.michalenok.wallet.service.api.TransferService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Profile;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Profile("test")
-class TransferServiceIntegrationImplTest extends IntegrationTestBase {
+ class TransferServiceIntegrationImplTest extends IntegrationTestBase {
     @Autowired
     private TransferService transferService;
     @MockBean

@@ -6,7 +6,6 @@ spring:
       enabled: false
   application:
     name: account-server
-
   liquibase:
     enabled: true
   security:

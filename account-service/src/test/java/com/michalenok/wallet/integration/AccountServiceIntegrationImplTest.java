@@ -7,7 +7,6 @@ import com.michalenok.wallet.service.api.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -15,8 +14,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Profile("test")
-class AccountServiceIntegrationImplTest extends IntegrationTestBase {
+ class AccountServiceIntegrationImplTest extends IntegrationTestBase {
     @Autowired
     private AccountService accountService;
     @MockBean
