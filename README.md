@@ -18,7 +18,7 @@ Digital Wallet is a microservices-based project allowing to perform deposit, sto
    
 ## Configurations for services:
 
-https://github.com/MMMMr1/digital_wallet
+https://github.com/MMMMr1/wallet-configs
 
 ## Running containerized builds
 
