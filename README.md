@@ -16,6 +16,9 @@ Digital Wallet is a microservices-based project allowing to perform deposit, sto
 - Swagger (OpenAPI 3.0) 
 - Docker
    
+## Configurations for services:
+
+https://github.com/MMMMr1/digital_wallet
 
 ## Running containerized builds
 
