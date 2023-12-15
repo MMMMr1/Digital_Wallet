@@ -22,12 +22,12 @@ pipeline {
         stage('Building images') {
             steps {
                 script {
-                userServiceImage = docker.build("marymary88/user-service:$BUILD_NUMBER", "./user-service")
-                accountServiceImage = docker.build("marymary88/account-service:$BUILD_NUMBER", "./account-service")
-                moneyTransferServiceImage = docker.build("marymary88/money-transfer-service:$BUILD_NUMBER", "./money-transfer-service")
-                apiGatewayServiceImage = docker.build("marymary88/api-gateway-service:$BUILD_NUMBER", "./api-gateway-service")
-                configurationServiceImage = docker.build("marymary88/configuration-service:$BUILD_NUMBER", "./configuration-service")
-                discoveryServiceImage = docker.build("marymary88/discovery-service:$BUILD_NUMBER", "./discovery-service")
+                userServiceImage = docker.build("marymary88/user-service:1.0", "./user-service")
+                accountServiceImage = docker.build("marymary88/account-service:1.0", "./account-service")
+                moneyTransferServiceImage = docker.build("marymary88/money-transfer-service:1.0", "./money-transfer-service")
+                apiGatewayServiceImage = docker.build("marymary88/api-gateway-service:1.0", "./api-gateway-service")
+                configurationServiceImage = docker.build("marymary88/configuration-service:1.0", "./configuration-service")
+                discoveryServiceImage = docker.build("marymary88/discovery-service:1.0", "./discovery-service")
                 }
             }
         }
@@ -47,12 +47,12 @@ pipeline {
         }
         stage('Cleaning up') {
             steps {
-                sh "docker rmi $userServiceImage:$BUILD_NUMBER"
-                sh "docker rmi $accountServiceImage:$BUILD_NUMBER"
-                sh "docker rmi $moneyTransferServiceImage:$BUILD_NUMBER"
-                sh "docker rmi $apiGatewayServiceImage:$BUILD_NUMBER"
-                sh "docker rmi $configurationServiceImage:$BUILD_NUMBER"
-                sh "docker rmi $discoveryServiceImage:$BUILD_NUMBER"
+                sh "docker rmi $userServiceImage:1.0"
+                sh "docker rmi $accountServiceImage:1.0"
+                sh "docker rmi $moneyTransferServiceImage:1.0"
+                sh "docker rmi $apiGatewayServiceImage:1.0"
+                sh "docker rmi $configurationServiceImage:1.0"
+                sh "docker rmi $discoveryServiceImage:1.0"
             }
         }
     }
