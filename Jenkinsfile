@@ -14,19 +14,9 @@ pipeline {
     }
 
     stages {
-        stage('Clean') {
-            steps {
-                sh 'gradle clean'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'gradle test'
-            }
-        }
         stage('Build') {
             steps {
-                sh 'gradle build'
+                sh 'gradle clean build'
             }
         }
         stage('Building images') {
