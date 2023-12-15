@@ -1,8 +1,18 @@
 pipeline {
+    environment {
+        registryCredential = 'docker_cred'
+        userServiceImage = ''
+        accountServiceImage = ''
+        moneyTransferServiceImage = ''
+        apiGatewayServiceImage = ''
+        configurationServiceImage = ''
+        discoveryServiceImage = ''
+    }
     agent any
     tools {
         gradle '8.5'
     }
+
     stages {
         stage('Clean') {
             steps {
@@ -19,18 +29,40 @@ pipeline {
                 sh 'gradle build'
             }
         }
-        stage('Build and push images') {
+        stage('Building images') {
             steps {
                 script {
-                   docker.withRegistry('', 'docker_cred') {
-                            userServiceImage = docker.build("marymary88/user-service:1.0", "./user-service").push()
-                            accountServiceImage = docker.build("marymary88/account-service:1.0", "./account-service").push()
-                            moneyTransferServiceImage = docker.build("marymary88/money-transfer-service:1.0", "./money-transfer-service").push()
-                            apiGatewayServiceImage = docker.build("marymary88/api-gateway-service:1.0", "./api-gateway-service").push()
-                            configurationServiceImage = docker.build("marymary88/configuration-service:1.0", "./configuration-service").push()
-                            discoveryServiceImage = docker.build("marymary88/discovery-service:1.0", "./discovery-service").push()
-                   }
+                userServiceImage = docker.build("marymary88/user-service:$BUILD_NUMBER", "./user-service")
+                accountServiceImage = docker.build("marymary88/account-service:$BUILD_NUMBER", "./account-service")
+                moneyTransferServiceImage = docker.build("marymary88/money-transfer-service:$BUILD_NUMBER", "./money-transfer-service")
+                apiGatewayServiceImage = docker.build("marymary88/api-gateway-service:$BUILD_NUMBER", "./api-gateway-service")
+                configurationServiceImage = docker.build("marymary88/configuration-service:$BUILD_NUMBER", "./configuration-service")
+                discoveryServiceImage = docker.build("marymary88/discovery-service:$BUILD_NUMBER", "./discovery-service")
                 }
+            }
+        }
+        stage('Deploy images') {
+            steps {
+                script {
+                   docker.withRegistry('', registryCredential) {
+                        userServiceImage.push()
+                        accountServiceImage.push()
+                        moneyTransferServiceImage.push()
+                        apiGatewayServiceImage.push()
+                        configurationServiceImage.push()
+                        discoveryServiceImage.push()
+                    }
+                }
+            }
+        }
+        stage('Cleaning up') {
+            steps {
+                sh "docker rmi $userServiceImage:$BUILD_NUMBER"
+                sh "docker rmi $accountServiceImage:$BUILD_NUMBER"
+                sh "docker rmi $moneyTransferServiceImage:$BUILD_NUMBER"
+                sh "docker rmi $apiGatewayServiceImage:$BUILD_NUMBER"
+                sh "docker rmi $configurationServiceImage:$BUILD_NUMBER"
+                sh "docker rmi $discoveryServiceImage:$BUILD_NUMBER"
             }
         }
     }
