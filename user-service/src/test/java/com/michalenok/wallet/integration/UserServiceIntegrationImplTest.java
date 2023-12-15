@@ -12,12 +12,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import static com.michalenok.wallet.model.constant.UserStatus.DEACTIVATED;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -30,10 +30,14 @@ class UserServiceIntegrationImplTest extends IntegrationTestBase {
 
     @Test
     void create_Successful() {
+        String mail = "dmitryd@dmitry.com";
         when(keycloakService.addUser(any(UserCreateDto.class)))
                 .thenReturn(UUID.randomUUID().toString());
-        UserInfoDto userInfoDto = userService.create(getUserCreateDto("dmitryd@dmitry.com", "2345678"));
-        assertEquals("dmitryd@dmitry.com", userInfoDto.mail());
+        UserInfoDto userInfoDto = userService.create(getUserCreateDto(mail, "2345678"));
+        UserInfoDto savedUser = userService.findByMail(mail);
+        assertEquals(savedUser.mail(), userInfoDto.mail());
+        assertEquals(savedUser.status(), userInfoDto.status());
+        assertEquals(savedUser.mobilePhone(), userInfoDto.mobilePhone());
     }
 
     @Test
@@ -68,7 +72,10 @@ class UserServiceIntegrationImplTest extends IntegrationTestBase {
                 .status("ACTIVATED")
                 .role(Set.of("USER"))
                 .build());
-        assertEquals("88888888", updatedUser.mobilePhone());
+        UserInfoDto savedUser = userService.findById(uuid);
+        assertEquals(savedUser.mail(), updatedUser.mail());
+        assertEquals(savedUser.status(), updatedUser.status());
+        assertEquals(savedUser.mobilePhone(), updatedUser.mobilePhone());
     }
 
     @Test
@@ -86,12 +93,17 @@ class UserServiceIntegrationImplTest extends IntegrationTestBase {
 
     @Test
     void getPage_Successful() {
-        assertEquals(3, userService.getPage(Pageable.unpaged()).getTotalElements());
+        List<UserInfoDto> content = userService.getPage(Pageable.unpaged()).getContent();
+        assertEquals(3, content.size());
+        assertEquals(UUID.fromString("ad16c450-386f-427b-a5e5-763577425e5d"), content.get(0).uuid());
+        assertEquals(UUID.fromString("eb9ce6ab-716f-4da6-9b9d-44329e64ab0c"), content.get(1).uuid());
+        assertEquals(UUID.fromString("edabdd93-5871-4243-b118-df575c1a1b8c"), content.get(2).uuid());
     }
 
     @Test
     void changeStatus_Successful() {
         UUID uuid = UUID.fromString("ad16c450-386f-427b-a5e5-763577425e5d");
+        assertNotEquals(DEACTIVATED, userService.findById(uuid).status());
         UserInfoDto userInfoDto = userService.changeStatus(uuid, DEACTIVATED);
         assertEquals(DEACTIVATED, userInfoDto.status());
     }
