@@ -33,7 +33,6 @@ public class KeycloakConfig {
                     .password(password)
                     .serverUrl(serverUrl)
                     .build();
-            log.info("Keycloak {}", keycloak.tokenManager().getAccessToken());
         }
         return keycloak;
     }
