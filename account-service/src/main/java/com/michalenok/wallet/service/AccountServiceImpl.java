@@ -97,12 +97,12 @@ public class AccountServiceImpl implements AccountService {
                 .accountNumber(accountUuid)
                 .clientId(userUuid)
                 .currencyCode("EUR")
-                .currentBalance(BigDecimal.ZERO)
-                .blockedSum(BigDecimal.ZERO)
+                .currentBalance(BigDecimal.ZERO.setScale(4))
+                .blockedSum(BigDecimal.ZERO.setScale(4))
                 .openDate(time)
                 .updatedAt(time)
                 .isActive(true)
-                .maxLimit(BigDecimal.valueOf(100000))
+                .maxLimit(BigDecimal.valueOf(100000).setScale(4))
                 .build();
     }
 }
