@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -23,6 +23,20 @@ class TransferValidationServiceImplTest {
     private TransferValidationServiceImpl validationService;
     @Mock
     private AccountService accountService;
+
+    @Test
+    void validateDebitTransfer_Successful() {
+        TransferRequestDto transferRequestDto = getTransferRequestDto(new BigDecimal(100),
+                "EUR");
+        when(accountService.findByAccountId(any(UUID.class)))
+                .thenReturn(AccountInfoDto.builder()
+                        .isActive(true)
+                        .currentBalance(new BigDecimal("1000"))
+                        .maxLimit(new BigDecimal("100000"))
+                        .currencyCode("EUR")
+                        .build());
+        assertDoesNotThrow(() -> validationService.validateDebitTransfer(transferRequestDto));
+    }
 
     @Test
     void validateDebitTransfer_AccountNotFoundException() {
@@ -74,6 +88,21 @@ class TransferValidationServiceImplTest {
     }
 
     @Test
+    void validateCreditTransfer_Successful() {
+        TransferRequestDto transferRequestDto = getTransferRequestDto(new BigDecimal(100),
+                "EUR");
+        when(accountService.findByAccountId(any(UUID.class)))
+                .thenReturn(AccountInfoDto.builder()
+                        .isActive(true)
+                        .currentBalance(new BigDecimal("1000"))
+                        .maxLimit(new BigDecimal("100000"))
+                        .currencyCode("EUR")
+                        .blockedSum(new BigDecimal("100"))
+                        .build());
+        assertDoesNotThrow(() -> validationService.validateCreditTransfer(transferRequestDto));
+    }
+
+    @Test
     void validateCreditTransfer_AccountNotFoundException() {
         TransferRequestDto transferRequestDto = getTransferRequestDto(new BigDecimal(100),
                 "EUR");
@@ -121,6 +150,20 @@ class TransferValidationServiceImplTest {
                         .build());
         assertThrows(InsufficientFundsException.class, () ->
                 validationService.validateCreditTransfer(transferRequestDto));
+    }
+    @Test
+    void validateInternalFundTransfer_Successful() {
+        TransferRequestDto transferRequestDto = getTransferRequestDto(new BigDecimal(100),
+                "EUR");
+        when(accountService.findByAccountId(any(UUID.class)))
+                .thenReturn(AccountInfoDto.builder()
+                        .isActive(true)
+                        .currencyCode("EUR")
+                        .maxLimit(new BigDecimal(100000))
+                        .currentBalance(new BigDecimal(1000))
+                        .blockedSum(new BigDecimal(10))
+                        .build());
+        assertDoesNotThrow(() -> validationService.validateInternalFundTransfer(transferRequestDto));
     }
 
     @Test
