@@ -32,3 +32,9 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.named("build") {
+    doLast {
+        file("./build/info.txt").writeText("build_version=$version")
+    }
+}
