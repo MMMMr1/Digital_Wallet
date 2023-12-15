@@ -20,4 +20,14 @@ pipeline {
             }
         }
     }
+    stage('Build and push images') {
+                steps {
+                    script {
+                        setAllVersions()
+                        docker.withRegistry('', 'docker_cred') {
+                            userServiceImage = docker.build("marymary88/user-service:1.0", "./user-service").push()
+                  }
+                    }
+                }
+            }
 }
