@@ -19,7 +19,6 @@ pipeline {
                 sh 'gradle build'
             }
         }
-    }
     stage('Build and push images') {
                 steps {
                     script {
@@ -30,4 +29,5 @@ pipeline {
                     }
                 }
             }
+    }
 }
