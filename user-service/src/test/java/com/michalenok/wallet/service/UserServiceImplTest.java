@@ -1,6 +1,5 @@
 package com.michalenok.wallet.service;
 
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.michalenok.wallet.feign.AccountServiceFeignClient;
 import com.michalenok.wallet.keycloak.KeycloakService;
 import com.michalenok.wallet.mapper.UserMapper;
@@ -22,9 +21,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.michalenok.wallet.service.UserUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -69,14 +68,12 @@ class UserServiceImplTest {
 
         Mockito.when(keycloakService.addUser(any(UserCreateDto.class)))
                 .thenReturn(UUID.randomUUID().toString());
+
         UserInfoDto userInfoDto = userService.create(userCreateDto);
-        assertThat(userInfoDto)
-                .hasFieldOrPropertyWithValue("mail", userInfoDto.mail())
-                .hasFieldOrPropertyWithValue("mobilePhone", userInfoDto.mobilePhone())
-                .hasFieldOrPropertyWithValue("status", userInfoDto.status())
-                .hasFieldOrPropertyWithValue("role", userInfoDto.role())
-                .hasFieldOrPropertyWithValue("createdAt", userInfoDto.createdAt())
-                .hasFieldOrPropertyWithValue("updatedAt", userInfoDto.updatedAt());
+
+        assertEquals(userCreateDto.mail(), userInfoDto.mail());
+        assertEquals(userCreateDto.mobilePhone(), userInfoDto.mobilePhone());
+        assertEquals(userCreateDto.status(), userInfoDto.status().name());
     }
 
     @Test
@@ -116,13 +113,10 @@ class UserServiceImplTest {
 
         UserInfoDto user = userService.findById(uuid);
 
-        assertThat(user)
-                .hasFieldOrPropertyWithValue("mail", user.mail())
-                .hasFieldOrPropertyWithValue("mobilePhone", user.mobilePhone())
-                .hasFieldOrPropertyWithValue("status", user.status())
-                .hasFieldOrPropertyWithValue("role", user.role())
-                .hasFieldOrPropertyWithValue("createdAt", user.createdAt())
-                .hasFieldOrPropertyWithValue("updatedAt", user.updatedAt());
+        assertEquals(userInfo.uuid(), user.uuid());
+        assertEquals(userInfo.mail(), user.mail());
+        assertEquals(userInfo.mobilePhone(), user.mobilePhone());
+        assertEquals(userInfo.status(), user.status());
     }
 
     @Test
@@ -147,15 +141,12 @@ class UserServiceImplTest {
         when(userMapper.toUserInfo(any(UserEntity.class)))
                 .thenReturn(userInfo);
 
-        UserInfoDto userByMail = userService.findByMail(mail);
+        UserInfoDto user = userService.findByMail(mail);
 
-        assertThat(userByMail)
-                .hasFieldOrPropertyWithValue("mail", userByMail.mail())
-                .hasFieldOrPropertyWithValue("mobilePhone", userByMail.mobilePhone())
-                .hasFieldOrPropertyWithValue("status", userByMail.status())
-                .hasFieldOrPropertyWithValue("role", userByMail.role())
-                .hasFieldOrPropertyWithValue("createdAt", userByMail.createdAt())
-                .hasFieldOrPropertyWithValue("updatedAt", userByMail.updatedAt());
+        assertEquals(userInfo.uuid(), user.uuid());
+        assertEquals(userInfo.mail(), user.mail());
+        assertEquals(userInfo.mobilePhone(), user.mobilePhone());
+        assertEquals(userInfo.status(), user.status());
     }
 
     @Test
