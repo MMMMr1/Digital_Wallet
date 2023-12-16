@@ -19,20 +19,19 @@ pipeline {
                 sh 'gradle clean build'
             }
         }
-        stage('SonarQube Analysis') {
-          steps {
-            withSonarQubeEnv('Sonar') {
-              sh './gradlew jacocoTestReport sonarqube -Dsonar.login=b82de7b91b30c7479f84869133f3db9e881e6e0f'
+        stage('SonarQube Analysis'){
+            steps {
+                withSonarQubeEnv("sonarqube1") {
+                    sh 'gradle sonar -D sonar.gradle.skipCompile=true'
+                }
             }
-
-          }
         }
-        stage("Quality Gate") {
-          steps {
-            timeout(time: 2, unit: 'MINUTES') {
-              waitForQualityGate abortPipeline: true
+        stage('Quality Gate'){
+            steps {
+                timeout(time: 2, unit: 'MINUTES'){
+                    waitForQualityGate abortPipeline: true
+                }
             }
-          }
         }
         stage('Building images') {
             steps {
