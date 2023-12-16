@@ -27,6 +27,7 @@ pipeline {
                 apiGatewayServiceImage = docker.build("marymary88/api-gateway-server:1.0", "./api-gateway-server")
                 configurationServiceImage = docker.build("marymary88/configuration-server:1.0", "./configuration-server")
                 discoveryServiceImage = docker.build("marymary88/discovery-server:1.0", "./discovery-server")
+                accountServiceImage = docker.build("marymary88/account-service:1.0", "./account-service")
                 }
             }
         }
@@ -39,6 +40,7 @@ pipeline {
                         apiGatewayServiceImage.push()
                         configurationServiceImage.push()
                         discoveryServiceImage.push()
+                        accountServiceImage.push()
                     }
                 }
             }
