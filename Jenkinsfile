@@ -45,12 +45,7 @@ pipeline {
         }
         stage('Cleaning up') {
             steps {
-                sh "docker rmi $userServiceImage:1.0"
-                sh "docker rmi $accountServiceImage:1.0"
-                sh "docker rmi $moneyTransferServiceImage:1.0"
-                sh "docker rmi $apiGatewayServiceImage:1.0"
-                sh "docker rmi $configurationServiceImage:1.0"
-                sh "docker rmi $discoveryServiceImage:1.0"
+                sh "docker system prune -f"
             }
         }
     }
