@@ -82,6 +82,7 @@ jacocoTestReport {
 
 sonarqube {
     properties {
+        property 'sonar.host.url', 'http://82.97.240.173:9000'
         property("sonar.projectName", "mary_wallet")
         property("sonar.projectKey", "mary_wallet")
     }

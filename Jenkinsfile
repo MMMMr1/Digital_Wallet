@@ -22,10 +22,7 @@ pipeline {
         stage('SonarQube Analysis'){
             steps {
                 withSonarQubeEnv("sonarqube1") {
-                    sh './gradlew sonar \
-                          -Dsonar.projectKey=mary_wallet \
-                          -Dsonar.host.url=http://82.97.240.173:9000 \
-                          -Dsonar.login=sqp_b4fc4e9bc84463bf79b030788851628b0da3eb32'
+                    sh 'gradle sonar -D sonar.gradle.skipCompile=true'
                 }
             }
         }
