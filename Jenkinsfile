@@ -21,7 +21,7 @@ pipeline {
         }
         stage('SonarQube Analysis'){
             steps {
-                withSonarQubeEnv("sonarqube1") {
+                withSonarQubeEnv("server-sonar") {
                     sh 'gradle sonar -D sonar.gradle.skipCompile=true'
                 }
             }
