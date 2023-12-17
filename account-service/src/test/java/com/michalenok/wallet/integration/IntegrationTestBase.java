@@ -5,6 +5,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -14,6 +15,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 
 @ActiveProfiles("test")
 @Testcontainers
+@Transactional
 @SqlGroup({
         @Sql(scripts = "classpath:sql/data.sql", executionPhase = BEFORE_TEST_METHOD),
         @Sql(scripts = "classpath:sql/clear_data.sql", executionPhase = AFTER_TEST_METHOD)})
