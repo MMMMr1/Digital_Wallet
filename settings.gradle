@@ -1,7 +1,12 @@
 rootProject.name = 'digital_wallet'
 include 'user-service'
+include 'account-service'
 include 'discovery-server'
 include 'configuration-server' 
 include 'api-gateway-server' 
 include 'keycloak' 
-include 'money-transfer-service' 
+include 'money-transfer-service'
+include 'user-service:logging-starter'
+findProject(':user-service:logging-starter')?.name = 'logging-starter'
+include 'logging-starter'
+

@@ -1,5 +1,6 @@
 package com.michalenok.wallet.web.controller;
 
+import com.michalenok.wallet.aspect.Logged;
 import com.michalenok.wallet.model.dto.request.UserCreateDto;
 import com.michalenok.wallet.model.dto.response.UserInfoDto;
 import com.michalenok.wallet.service.api.UserService;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
 @Tag(name = "users")
@@ -28,10 +30,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService service;
-  
+
+    @Logged
     @Operation(summary = "Register client in application")
     @ApiResponses({
-            @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "201", description = "Created", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
     @PreAuthorize("hasRole('ADMIN')")
@@ -42,10 +45,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Logged
     @Operation(summary = "Loading of all clients",
-    security = @SecurityRequirement(name = "security_auth" ))
+            security = @SecurityRequirement(name = "security_auth"))
     @ApiResponses({
-            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "200", description = "Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
     @PreAuthorize("hasRole('ADMIN')")
@@ -53,10 +57,11 @@ public class UserController {
     protected Page<UserInfoDto> getAll(Pageable pageable) {
         return service.getPage(pageable);
     }
- 
+
+    @Logged
     @Operation(summary = "Loading of client by uuid")
     @ApiResponses({
-            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "200", description = "Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
     @PreAuthorize("hasRole('ADMIN')")
@@ -64,11 +69,12 @@ public class UserController {
     public UserInfoDto get(@PathVariable("uuid") UUID uuid) {
         log.info("get user with {}", uuid);
         return service.findById(uuid);
-    } 
-  
+    }
+
+    @Logged
     @Operation(summary = "Update client by uuid")
     @ApiResponses({
-            @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "200", description = "Success", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Server Error")
     })
     @PreAuthorize("hasRole('ADMIN')")

@@ -1,5 +1,6 @@
 package com.michalenok.wallet.web.controller;
 
+import com.michalenok.wallet.aspect.Logged;
 import com.michalenok.wallet.model.dto.response.AccountInfoDto;
 import com.michalenok.wallet.service.api.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class AccountController {
     private final AccountService accountService;
 
+    @Logged
     @Operation(summary = "Creating of new account", tags = "accounts")
     @PostMapping
     protected ResponseEntity<?> create(@RequestParam(name = "client_uuid") UUID uuid) {
@@ -29,6 +32,7 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Logged
     @Operation(summary = "Loading of accounts", tags = "accounts")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -37,6 +41,7 @@ public class AccountController {
         return accountService.getAccounts(pageable);
     }
 
+    @Logged
     @Operation(summary = "Loading of account details", tags = "accounts")
     @GetMapping(path = "/details")
     public AccountInfoDto get(@RequestParam("account_uuid") UUID uuid) {
@@ -44,6 +49,7 @@ public class AccountController {
         return accountService.findByAccountId(uuid);
     }
 
+    @Logged
     @Operation(summary = "Loading of all client accounts by client uuid", tags = "accounts")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/{uuid}")
@@ -52,6 +58,7 @@ public class AccountController {
         return accountService.findAllByClientId(uuid);
     }
 
+    @Logged
     @Operation(summary = "Closing of account by uuid", tags = "accounts")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/closing")

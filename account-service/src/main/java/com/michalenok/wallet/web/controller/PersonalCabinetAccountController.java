@@ -1,5 +1,6 @@
 package com.michalenok.wallet.web.controller;
 
+import com.michalenok.wallet.aspect.Logged;
 import com.michalenok.wallet.model.dto.response.AccountInfoDto;
 import com.michalenok.wallet.service.api.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class PersonalCabinetAccountController {
     private final AccountService accountService;
 
+    @Logged
     @Operation(summary = "Loading of all client accounts by client uuid", tags = "accounts")
     @GetMapping
     public List<AccountInfoDto> getAllAccounts(@AuthenticationPrincipal Jwt jwt) {

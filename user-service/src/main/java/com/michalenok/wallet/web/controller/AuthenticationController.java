@@ -1,5 +1,6 @@
 package com.michalenok.wallet.web.controller;
 
+import com.michalenok.wallet.aspect.Logged;
 import com.michalenok.wallet.model.dto.request.UserRegistrationDto;
 import com.michalenok.wallet.service.api.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 public class AuthenticationController {
     private final AuthenticationService service;
-
+    @Logged
     @Operation(summary ="Register client")
     @ApiResponses({
             @ApiResponse(responseCode="201", description ="Created", content = {@Content(mediaType = "application/json")}),
@@ -35,6 +36,7 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Logged
     @Operation(summary = "Verify client")
     @ApiResponses({
             @ApiResponse(responseCode="200", description ="Success", content = {@Content(mediaType = "application/json")}),

@@ -24,6 +24,7 @@ repositories {
 	maven {
 		url "https://packages.confluent.io/maven"
 	}
+	mavenLocal()
 }
 
 dependencies {
@@ -48,7 +49,8 @@ dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation "org.apache.avro:avro:$avroVersion"
 	implementation "io.confluent:kafka-avro-serializer:$kafkaAvroSerializerVersion"
-	implementation "io.confluent:kafka-schema-registry-client:$kafkaSchemaRegistryClientVersion" 
+	implementation "io.confluent:kafka-schema-registry-client:$kafkaSchemaRegistryClientVersion"
+	implementation "com.michalenok:logging-starter:$loggingStarterVersion"
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'

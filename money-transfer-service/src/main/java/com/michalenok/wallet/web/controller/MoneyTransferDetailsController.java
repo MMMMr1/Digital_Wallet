@@ -1,5 +1,6 @@
 package com.michalenok.wallet.web.controller;
 
+import com.michalenok.wallet.aspect.Logged;
 import com.michalenok.wallet.model.dto.request.TransferSpecificationDto;
 import com.michalenok.wallet.model.dto.response.TransferInfoDto;
 import com.michalenok.wallet.service.api.TransferDetailsService;
@@ -11,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class MoneyTransferDetailsController {
     private final TransferDetailsService transferDetailsService;
 
+    @Logged
     @Operation(summary = "Show funds transfer details", tags = "transfers details")
     @GetMapping(path = "/{uuid}")
     protected TransferInfoDto showTransferDetails(@PathVariable("uuid") @NotBlank UUID uuid) {
@@ -28,6 +31,7 @@ public class MoneyTransferDetailsController {
         return transferDetailsService.getTransfer(uuid);
     }
 
+    @Logged
     @Operation(summary = "Show all funds transfers for account", tags = "transfers details")
     @GetMapping(path = "/account/{account_uuid}")
     protected List<TransferInfoDto> showTransfersByAccount(@PathVariable("account_uuid") @NotBlank UUID accountUuid) {
@@ -35,6 +39,7 @@ public class MoneyTransferDetailsController {
         return transferDetailsService.getTransfers(accountUuid);
     }
 
+    @Logged
     @Operation(summary = "Show all funds transfers", tags = "transfers details")
     @GetMapping
     protected Page<TransferInfoDto> showTransfers(Pageable pageable) {
@@ -42,6 +47,7 @@ public class MoneyTransferDetailsController {
         return transferDetailsService.getTransfers(pageable);
     }
 
+    @Logged
     @Operation(summary = "Search funds transfers", tags = "transfers details")
     @PostMapping
     public Page<TransferInfoDto> searchTransfers(@RequestBody @Valid TransferSpecificationDto specificationDto,
@@ -50,11 +56,12 @@ public class MoneyTransferDetailsController {
         return transferDetailsService.searchTransfers(specificationDto, pageable);
     }
 
+    @Logged
     @Operation(summary = "Search funds transfers for account", tags = "transfers details")
     @PostMapping(path = "/account/{account_uuid}")
     protected Page<TransferInfoDto> searchTransfersByAccount(@PathVariable("account_uuid") @NotBlank UUID accountUuid,
-                                                           @RequestBody @Valid TransferSpecificationDto specificationDto,
-                                                           Pageable pageable) {
+                                                             @RequestBody @Valid TransferSpecificationDto specificationDto,
+                                                             Pageable pageable) {
         log.info("Search funds transfers for account with uuid {}", accountUuid);
         return transferDetailsService.searchTransfersByAccount(accountUuid, specificationDto, pageable);
     }

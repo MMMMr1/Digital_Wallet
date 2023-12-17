@@ -1,5 +1,6 @@
 package com.michalenok.wallet.web.controller;
 
+import com.michalenok.wallet.aspect.Logged;
 import com.michalenok.wallet.model.dto.request.TransferRequestDto;
 import com.michalenok.wallet.model.dto.response.TransferInfoDto;
 import com.michalenok.wallet.service.api.TransferService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class MoneyTransferController {
     private final TransferService transferService;
 
+    @Logged
     @Operation(summary = "Account replenishment", tags = "transfers")
     @PostMapping("/debit-transfer")
     public TransferInfoDto debitTransfer(@RequestBody @Validated TransferRequestDto debitTransferRequest) {
@@ -23,6 +25,7 @@ public class MoneyTransferController {
         return transferService.debitTransfer(debitTransferRequest);
     }
 
+    @Logged
     @Operation(summary = "Cash transfer from the account", tags = "transfers")
     @PostMapping("/credit-transfer")
     public TransferInfoDto creditPayment(@RequestBody @Validated TransferRequestDto creditTransferRequest) {
@@ -30,6 +33,7 @@ public class MoneyTransferController {
         return transferService.creditTransfer(creditTransferRequest);
     }
 
+    @Logged
     @Operation(summary = "Internal transfer of funds", tags = "transfers")
     @PostMapping("/internal-transfer")
     public TransferInfoDto internalPayment(@RequestBody @Validated TransferRequestDto transferRequestDto) {
