@@ -13,41 +13,34 @@ pipeline {
         gradle '8.5'
     }
   stages {
-    stages('for main branch') {
+    stage('for main branch') {
       when {
         branch 'main'
       }
-       stage('Test') {
-                   steps {
-                       sh 'gradle clean test'
-                   }
-               }
-
+           steps {
+               sh 'gradle clean test'
+           }
     }
     stages('for pull request') {
       when {
         changeRequest()
       }
-        stage('Build') {
-            steps {
+      steps {
                 sh 'gradle clean build'
-            }
-        }
-      stage('SonarQube Analysis'){
-                  steps {
-                      withSonarQubeEnv("SonarQube") {
-                        sh 'gradle sonar -D sonar.gradle.skipCompile=true'
-                      }
+      }
+      steps {
+          withSonarQubeEnv("SonarQube") {
+             sh 'gradle sonar -D sonar.gradle.skipCompile=true'
+      }
                   }
-              }
-              stage('Quality Gate'){
+
+
                   steps {
                       timeout(time: 2, unit: 'MINUTES'){
                           waitForQualityGate abortPipeline: true
                       }
                   }
-              }
-              stage('Building images') {
+
                   steps {
                       script {
                       userServiceImage = docker.build("marymary88/user-service:1.0", "./user-service")
@@ -57,8 +50,7 @@ pipeline {
                       accountServiceImage = docker.build("marymary88/account-service:1.0", "./account-service")
                       }
                   }
-              }
-                            stage('Deploy images') {
+
                                 steps {
                                     script {
                                        docker.withRegistry('', registryCredential) {
@@ -70,12 +62,9 @@ pipeline {
                                         }
                                     }
                                 }
-                            }
-                            stage('Cleaning up') {
                                 steps {
                                     sh "docker system prune -f"
                                 }
-                            }
     }
   }
 }
