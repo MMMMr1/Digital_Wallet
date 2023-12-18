@@ -76,9 +76,11 @@ dependencyManagement {
 tasks.withType(Jar){
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
 tasks.named('sourcesJar').configure {
 	dependsOn generateAvroJava
 }
+
 generateAvroJava {
 	source("/src/main/resources/avro")
 	include("**/*.avsc")
