@@ -21,8 +21,8 @@ pipeline {
         }
         stage('SonarQube Analysis'){
             steps {
-                withSonarQubeEnv("server-sonar") {
-                     sh './gradlew jacocoTestReport sonarqube -Dsonar.login=sqp_a2890016e640da0aa05f368c4f2c5da40b54f310'
+                withSonarQubeEnv() {
+                  sh "./gradlew sonar"
                 }
             }
         }
