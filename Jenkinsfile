@@ -47,6 +47,7 @@ pipeline {
            }
            sh "docker system prune -f"
     }
+    }
 
     stage('for main branch') {
       when {
@@ -56,5 +57,5 @@ pipeline {
                sh 'gradle clean test'
            }
     }
-  }
+    }
 }
