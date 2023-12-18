@@ -63,19 +63,17 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
-tasks.named("compileJava").configure {
-    source(generateAvroJava)
-}
+
 generateAvroJava {
     source("/src/main/resources/avro")
     include("**/*.avsc")
-    outputDir = file("/src/main/java")
+    outputDir = file("/src/main/java/avro")
 }
 
 generateAvroProtocol {
     source("/src/main/resources/avro")
     include("**/*.avdl")
-    outputDir = file("/src/main/java")
+    outputDir = file("/src/main/java/avro")
 }
 
 tasks.named('test') {
