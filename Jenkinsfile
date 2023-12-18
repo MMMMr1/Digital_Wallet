@@ -22,7 +22,7 @@ pipeline {
         stage('SonarQube Analysis'){
             steps {
                 withSonarQubeEnv("SonarQube") {
-                  sh "./gradlew sonar"
+                  sh 'gradle sonar -D sonar.gradle.skipCompile=true'
                 }
             }
         }
