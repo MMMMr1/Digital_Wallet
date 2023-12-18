@@ -87,3 +87,6 @@ generateAvroProtocol {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+tasks.named('sourcesJar').configure {
+	dependsOn generateAvroJava
+}
