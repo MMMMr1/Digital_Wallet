@@ -27,5 +27,5 @@ To run the digital wallet microservices in a Docker container, do the following:
 Build an images and run the build.
 
 ```shell
-docker-compose up
+docker-compose up 
 ``` 
