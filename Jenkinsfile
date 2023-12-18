@@ -37,7 +37,6 @@ pipeline {
             steps {
                 script {
                 userServiceImage = docker.build("marymary88/user-service:1.0", "./user-service")
-                moneyTransferServiceImage = docker.build("marymary88/money-transfer-service:1.0", "./money-transfer-service")
                 apiGatewayServiceImage = docker.build("marymary88/api-gateway-server:1.0", "./api-gateway-server")
                 configurationServiceImage = docker.build("marymary88/configuration-server:1.0", "./configuration-server")
                 discoveryServiceImage = docker.build("marymary88/discovery-server:1.0", "./discovery-server")
@@ -50,7 +49,6 @@ pipeline {
                 script {
                    docker.withRegistry('', registryCredential) {
                         userServiceImage.push()
-                        moneyTransferServiceImage.push()
                         apiGatewayServiceImage.push()
                         configurationServiceImage.push()
                         discoveryServiceImage.push()
