@@ -63,17 +63,17 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
-
+compileJava.dependsOn ':account-service:generateAvroProtocol'
 generateAvroJava {
     source("/src/main/resources/avro")
     include("**/*.avsc")
-    outputDir = file("/src/main/java/avro")
+    outputDir = file("/src/main/java")
 }
 
 generateAvroProtocol {
     source("/src/main/resources/avro")
     include("**/*.avdl")
-    outputDir = file("/src/main/java/avro")
+    outputDir = file("/src/main/java")
 }
 
 tasks.named('test') {
