@@ -15,9 +15,6 @@ pipeline {
   stages {
     stage('for pull request') {
       steps {
-            when {
-              changeRequest()
-            }
           sh 'gradle clean build'
 
           withSonarQubeEnv("SonarQube") {
