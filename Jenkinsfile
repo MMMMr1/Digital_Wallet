@@ -17,6 +17,13 @@ pipeline {
       steps {
           sh 'gradle clean build'
 
+          withSonarQubeEnv("SonarQube") {
+             sh 'gradle sonar -D sonar.gradle.skipCompile=true'
+          }
+
+           timeout(time: 2, unit: 'MINUTES'){
+           waitForQualityGate abortPipeline: true
+           }
 
            script {
                       userServiceImage = docker.build("marymary88/user-service:1.0", "./user-service")
@@ -37,15 +44,14 @@ pipeline {
            }
            sh "docker system prune -f"
       }
-    }
 
-    stage('for main branch') {
-      when {
-        branch 'main'
-      }
-      steps {
-        sh 'gradle clean test'
+      stage('for master branch') {
+        when {
+           branch 'master'
+        }
+        steps {
+           sh 'gradle clean test'
+        }
       }
     }
-  }
 }
