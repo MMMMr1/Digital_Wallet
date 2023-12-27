@@ -14,9 +14,6 @@ pipeline {
     }
   stages {
     stage('for pull request') {
-      when {
-        changeRequest()
-      }
       steps {
           sh 'gradle clean build'
 
@@ -46,16 +43,16 @@ pipeline {
                   }
            }
            sh "docker system prune -f"
-    }
+      }
     }
 
     stage('for main branch') {
       when {
         branch 'main'
       }
-           steps {
-               sh 'gradle clean test'
-           }
+      steps {
+        sh 'gradle clean test'
+      }
     }
-    }
+  }
 }
