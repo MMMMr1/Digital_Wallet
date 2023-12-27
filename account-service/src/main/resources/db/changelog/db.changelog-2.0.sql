@@ -1,7 +1,6 @@
 --liquibase formatted sql
 
 --changeset mmichalenok:7
-
 CREATE TABLE IF NOT EXISTS app.transfers
 (
     transaction_uuid uuid PRIMARY KEY,
