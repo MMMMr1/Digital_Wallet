@@ -47,6 +47,7 @@ pipeline {
            }
            sh "docker system prune -f"
       }
+      }
 
       stage('for master branch') {
         when {
@@ -57,5 +58,4 @@ pipeline {
         }
       }
     }
-}
 }
