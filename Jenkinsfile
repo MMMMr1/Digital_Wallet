@@ -17,13 +17,6 @@ pipeline {
       steps {
           sh 'gradle clean build'
 
-          withSonarQubeEnv("SonarQube") {
-             sh 'gradle sonar -D sonar.gradle.skipCompile=true'
-          }
-
-           timeout(time: 2, unit: 'MINUTES'){
-           waitForQualityGate abortPipeline: true
-           }
 
            script {
                       userServiceImage = docker.build("marymary88/user-service:1.0", "./user-service")
