@@ -12,6 +12,7 @@ Digital Wallet is a microservices-based project allowing to perform deposit, sto
 - Spring Cloud Netflix Eureka
 - Spring Cloud Config Server
 - Spring Cloud Gateway
+- Kafka
 - PostgreSQL 
 - Swagger (OpenAPI 3.0) 
 - Docker
